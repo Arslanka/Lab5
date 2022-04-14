@@ -1,63 +1,73 @@
 [
   {
-    "widget": {
-      "debug": "on",
-      "window": {
-        "title": [
-          "Sample Konfabulator Widget",
-          "12"
-        ],
-        "name": "main_window",
-        "width": 500,
-        "height": 500
-      },
-      "image": {
-        "src": "Images/Sun.png",
-        "name": "sun1",
-        "hOffset": 250,
-        "vOffset": 250,
-        "alignment": "center"
-      },
-      "text": {
-        "data": "Click Here",
-        "size": 36,
-        "style": "bold",
-        "name": "text1",
-        "hOffset": 250,
-        "vOffset": 100,
-        "alignment": "center",
-        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    "id": 1,
+    "name": "Arslan",
+    "coordinates": {
+      "x": 412,
+      "y": 23
+    },
+    "creationDate": "2011-12-03T10:15:30+01:00",
+    "age": 18,
+    "weight": 65.5,
+    "color": "GREEN",
+    "type": "FIRE",
+    "killer": {
+      "name": "Vitya",
+      "birthday": "2011-12-03T10:15:30+01:00",
+      "nationality": "GERMANY",
+      "location": {
+        "x": 10,
+        "y": 20,
+        "z": 30,
+        "name": "Alpi"
       }
     }
   },
   {
-    "widget": {
-      "debug": "sex",
-      "window": {
-        "title": [
-          "Sample Konfabulator Widget",
-          "12"
-        ],
-        "name": "main_window",
-        "width": 500,
-        "height": 500
-      },
-      "image": {
-        "src": "Images/Sun.png",
-        "name": "sun1",
-        "hOffset": 250,
-        "vOffset": 250,
-        "alignment": "center"
-      },
-      "text": {
-        "data": "Click Here",
-        "size": 36,
-        "style": "bold",
-        "name": "text1",
-        "hOffset": 250,
-        "vOffset": 100,
-        "alignment": "center",
-        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    "id": 2,
+    "name": "Amir",
+    "coordinates": {
+      "x": 123,
+      "y": 444
+    },
+    "creationDate": "2011-12-03T10:15:30+01:00",
+    "age": 18,
+    "weight": 65.5,
+    "color": "GREEN",
+    "type": "FIRE",
+    "killer": {
+      "name": "Zhenya",
+      "birthday": "2011-12-03T10:15:30+01:00",
+      "nationality": "GERMANY",
+      "location": {
+        "x": 10,
+        "y": 20,
+        "z": 30,
+        "name": "Alpi"
+      }
+    }
+  },
+  {
+    "id": 1,
+    "name": "Roma",
+    "coordinates": {
+      "x": 412,
+      "y": 23
+    },
+    "creationDate": "2011-12-03T10:15:30+01:00",
+    "age": 23,
+    "weight": 65.5,
+    "color": "GREEN",
+    "type": "AIR",
+    "killer": {
+      "name": "Vlad",
+      "birthday": "2011-12-03T10:15:30+01:00",
+      "nationality": "GERMANY",
+      "location": {
+        "x": 10,
+        "y": 20,
+        "z": 30,
+        "name": "Alpi"
       }
     }
   }

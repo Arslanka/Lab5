@@ -31,6 +31,13 @@ public class Coordinates {
         this.y = y;
     }
 
+   /* public static Coordinates fromJson(Map<String, Object> json) {
+        new Builder()
+                .withX(json.get('x'))
+                .withY(json.get('y'))
+                .build();
+    }*/
+
     public static class Builder {
         private final Coordinates newCoordinates;
 
