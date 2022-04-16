@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.jar.JarException;
 
 public class JsonFile {
     private final TextFile textFile;
@@ -15,12 +16,19 @@ public class JsonFile {
         this.textFile = textFile;
     }
 
-    public List<Dragon> read() throws IOException {
+    public List<Dragon> read() throws IOException, JsonParseException {
         Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class
                 , (JsonDeserializer<ZonedDateTime>)
                         (json, type, jsonPrimitive)
                                 -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
-        Dragon[] dragons = gson.fromJson(textFile.read(), Dragon[].class);
+        Dragon[] dragons;
+        try {
+            dragons = gson.fromJson(textFile.read(), Dragon[].class);
+        } catch (JsonParseException e) {
+            throw new JsonParseException("Ошибка парсинга json-файла: данные в файле некорректны.");
+        } catch (IOException e) {
+            throw new IOException("Невозможно прочитать файл.");
+        }
         return new ArrayList<>(Arrays.asList(dragons));
     }
 
@@ -28,7 +36,7 @@ public class JsonFile {
         return textFile.read();
     }
 
-    public void write(Set<Dragon> dragonSet) throws IOException {
+    public void write(Set<Dragon> dragonSet) throws IOException, JsonIOException {
         Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, (JsonSerializer<ZonedDateTime>)
                         (date, type, jsonSerializationContext)
                                 -> new JsonPrimitive(date.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)))

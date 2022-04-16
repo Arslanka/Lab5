@@ -7,20 +7,20 @@ import sun.text.normalizer.UTF16;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-
+import java.*;
 public class TextFile implements IReadable, IWriteable {
     private final File file;
 
     public TextFile(File file) throws FileNotFoundException, FileReadPermissionException {
         this.file = file;
         if (!file.exists()) {
-            throw new FileNotFoundException("Файла с таким названием не существует");
+            throw new FileNotFoundException("Файла с таким названием не существует.");
         }
         if (file.exists() && file.isDirectory()) {
-            throw new FileNotFoundException("По введенному пути находится директория, а не файл");
+            throw new FileNotFoundException("По введенному пути находится директория, а не файл.");
         }
         if (!file.canRead()) {
-            throw new FileReadPermissionException("Нет прав для чтения файла"); //TODO FileReadPermissionException
+            throw new FileReadPermissionException("Нет прав для чтения файла."); //TODO FileReadPermissionException
         }
     }
 
@@ -36,13 +36,16 @@ public class TextFile implements IReadable, IWriteable {
             builder.append((char) ch);
         }
         in.close();
+        if (builder.toString().isEmpty()) {
+            throw new IOException("Файл пуст. Пожалуйста, заполните его данными.");
+        }
         return builder.toString();
     }
 
     @Override
     public void write(String string) throws IOException {
         final OutputStreamWriter streamWriter = new OutputStreamWriter(new FileOutputStream(this.file)
-                , StandardCharsets.UTF_16);
+                , StandardCharsets.UTF_8);
         streamWriter.write(string);
         streamWriter.close();
     }

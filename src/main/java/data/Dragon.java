@@ -185,7 +185,7 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     @Override
-    public String toString() {
+    public String toString() { //TODO DO PERFECT
         return "Dragon{" +
                 "id=" + id +
                 ", name='" + name + '\'' +

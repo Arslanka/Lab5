@@ -13,8 +13,7 @@ public class CollectionManager {
     private final java.time.LocalDateTime creationDate;
 
 
-    public CollectionManager(JsonFile jsonFile) throws IOException {
-        List<Dragon> dragonList = jsonFile.read();
+    public CollectionManager(List<Dragon> dragonList) {
         dragonHashSet.addAll(dragonList);
         this.creationDate = java.time.LocalDateTime.now();
     }

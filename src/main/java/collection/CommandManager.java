@@ -2,15 +2,17 @@ package collection;
 
 
 import file.JsonFile;
+import io.RequestElement;
 
 public class CommandManager {
-    private final JsonFile jsonFile;
     private final CollectionManager collectionManager;
 
-    public CommandManager(JsonFile jsonFile, CollectionManager collectionManager) {
-        this.jsonFile = jsonFile;
+    public CommandManager(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
 
 
+    public boolean executeCommand(RequestElement command, CollectionManager co) {
+        return true;
+    }
 }

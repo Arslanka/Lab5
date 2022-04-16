@@ -1,44 +1,23 @@
 package run;
 
-import data.*;
-import file.JsonFile;
-import file.TextFile;
 
-import java.io.*;
-import java.util.*;
+import io.Console;
+
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        File inputFile = new File("dragonCollection.json");
-        File outputFile = new File("Another.json");
-        FileReader reader = new FileReader(outputFile);
-        Dragon dragon = new Dragon.Builder()
-                .withId()
-                .withName("Rafail")
-                .withCoordinates(new Coordinates.Builder()
-                        .withX(1)
-                        .withY(2.0)
-                        .build())
-                .withCreationDate()
-                .withAge(49L)
-                .withWeight((float) 85.5)
-                .withColor(Color.GREEN)
-                .withType(DragonType.FIRE)
-                .withPerson(new Person.Builder()
-                        .withName("Arslan")
-                        .withBirthday(java.time.ZonedDateTime.now())
-                        .withLocation(new Location.Builder().
-                                withName("Kazan")
-                                .withX(2)
-                                .withY(1)
-                                .withZ(10)
-                                .build())
-                        .withNationality(Country.GERMANY).
-                        build())
-                .build();
-        JsonFile jsonFile = new JsonFile(new TextFile(outputFile));
-        Set<Dragon> dragonSet = new HashSet<>();
-        dragonSet.add(dragon);
-        jsonFile.write(dragonSet);
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
+    public static void main(String[] args) { //TODO TRYCATCH
+        System.out.println("Введите название файла, данными из которого будет заполнена коллекция");
+        Scanner scanner = new Scanner(System.in);
+        String arg = scanner.nextLine();
+        //args
+        if (arg.isEmpty()) {
+            System.out.println(ANSI_YELLOW + "Вы не ввели название файла. Пожалуйста, попробуйте еще раз.");
+        } else {
+            Console console = new Console(arg);
+            console.startInteractiveMode();
+        }
     }
 }
