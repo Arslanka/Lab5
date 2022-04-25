@@ -1,14 +1,17 @@
 package data;
 
+import collection.CollectionManager;
+
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Objects;
 
 
 public class Dragon implements Comparable<Dragon> {
-    private static Integer curId = 1; //
 
-    private final Integer id = curId;//Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не може"т быть null, Строка не может быть пустой
+    private Integer id = CollectionManager.mex();
+    ;//Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Long age; //Значение поля должно быть больше 0
@@ -24,17 +27,17 @@ public class Dragon implements Comparable<Dragon> {
         return id;
     }
 
-    public void setId() {
-        curId++;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) throws IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException();
-        if (name.isEmpty()) throw new IllegalArgumentException();
+        if (name == null) {
+            throw new IllegalArgumentException("Имя не может быть null");
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Имя не может быть \"");
+        }
         this.name = name;
     }
 
@@ -43,7 +46,7 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-        if (coordinates == null) throw new IllegalArgumentException();
+        if (coordinates == null) throw new IllegalArgumentException("Координаты не могут быть null");
         this.coordinates = coordinates;
     }
 
@@ -60,9 +63,13 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setAge(Long age) throws IllegalArgumentException {
-        if (age == null) throw new IllegalArgumentException();
-        if (age == 0) throw new IllegalArgumentException();
+        if (age == null) throw new IllegalArgumentException("Возраст не может быть null");
+        if (age <= 0) throw new IllegalArgumentException("Возраст не может быть меньше или равен 0");
         this.age = age;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Float getWeight() {
@@ -70,8 +77,8 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setWeight(Float weight) throws IllegalArgumentException {
-        if (weight == null) throw new IllegalArgumentException();
-        if (weight == 0) throw new IllegalArgumentException();
+        if (weight == null) throw new IllegalArgumentException("Вec не может быть null");
+        if (weight <= 0) throw new IllegalArgumentException("Вec не может быть меньше или равен 0");
         this.weight = weight;
     }
 
@@ -80,7 +87,7 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setColor(Color color) throws IllegalArgumentException {
-        if (color == null) throw new IllegalArgumentException();
+        if (color == null) throw new IllegalArgumentException("Цвет не может быть null");
         this.color = color;
     }
 
@@ -89,7 +96,7 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setType(DragonType type) {
-        if (type == null) throw new IllegalArgumentException();
+        if (type == null) throw new IllegalArgumentException("Тип не может быть null");
         this.type = type;
     }
 
@@ -98,13 +105,13 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setKiller(Person killer) {
-        if (killer == null) throw new IllegalArgumentException();
+        if (killer == null) throw new IllegalArgumentException("Киллер не может быть null");
         this.killer = killer;
     }
 
     @Override
     public int compareTo(Dragon dragonObj) {
-        return id.compareTo(dragonObj.getId());
+        return age.compareTo(dragonObj.getAge());
     }
 
     public static class Builder {
@@ -114,10 +121,6 @@ public class Dragon implements Comparable<Dragon> {
             newDragon = new Dragon();
         }
 
-        public Builder withId() {
-            newDragon.setId();
-            return this;
-        }
 
         public Builder withName(String name) throws IllegalArgumentException {
             newDragon.setName(name);
@@ -159,11 +162,12 @@ public class Dragon implements Comparable<Dragon> {
             return this;
         }
 
+
         public Dragon build() throws IllegalArgumentException {
             if (newDragon.name == null || newDragon.creationDate == null || newDragon.coordinates == null ||
-                    newDragon.id == null || newDragon.age == null || newDragon.color == null || newDragon.killer == null
-                    || newDragon.type == null || newDragon.weight == null) {
-                throw new IllegalArgumentException();
+                    newDragon.id == null || newDragon.age == null
+                    || newDragon.color == null || newDragon.weight == null || newDragon.killer.getName() == null) {
+                ;
             }
             return newDragon;
         }

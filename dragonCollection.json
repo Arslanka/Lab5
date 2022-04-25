@@ -12,7 +12,7 @@
     "color": "GREEN",
     "type": "FIRE",
     "killer": {
-      "name": "Vitya",
+      "name": "lox",
       "birthday": "2011-12-03T10:15:30+01:00",
       "nationality": "GERMANY",
       "location": {
@@ -48,7 +48,7 @@
     }
   },
   {
-    "id": 1,
+    "id": 3,
     "name": "Roma",
     "coordinates": {
       "x": 412,

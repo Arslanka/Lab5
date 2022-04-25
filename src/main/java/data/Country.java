@@ -1,9 +1,15 @@
 package data;
 
 public enum Country {
-    UNITED_KINGDOM,
-    GERMANY,
-    THAILAND;
+
+    UNITED_KINGDOM("UNITED_KINGDOM"),
+
+    GERMANY("GERMANY"),
+
+    THAILAND("THAILAND");
+
+    Country(String name) {
+    }
 
     public static String nameList() {
         StringBuilder nameList = new StringBuilder();

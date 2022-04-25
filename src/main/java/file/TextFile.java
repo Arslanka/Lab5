@@ -1,26 +1,25 @@
 package file;
 
 import exceptions.FileReadPermissionException;
-import io.IReadable;
-import io.IWriteable;
-import sun.text.normalizer.UTF16;
+import io.Readable;
+import io.Writeable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.*;
-public class TextFile implements IReadable, IWriteable {
+
+public class TextFile implements Readable, Writeable {
     private final File file;
 
     public TextFile(File file) throws FileNotFoundException, FileReadPermissionException {
         this.file = file;
         if (!file.exists()) {
-            throw new FileNotFoundException("Файла с таким названием не существует.");
+            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста введите корректные данные");
         }
         if (file.exists() && file.isDirectory()) {
-            throw new FileNotFoundException("По введенному пути находится директория, а не файл.");
+            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста введите корректные данные");
         }
         if (!file.canRead()) {
-            throw new FileReadPermissionException("Нет прав для чтения файла."); //TODO FileReadPermissionException
+            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста введите корректные данные"); //TODO FileReadPermissionException
         }
     }
 

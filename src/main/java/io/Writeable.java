@@ -3,6 +3,6 @@ package io;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface IWriteable {
+public interface Writeable {
     void write(String string) throws IOException;
 }

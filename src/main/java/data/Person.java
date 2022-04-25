@@ -3,7 +3,7 @@ package data;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-public class Person {
+public class Person implements Comparable<Person> {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private java.time.ZonedDateTime birthday; //Поле может быть null
     private Country nationality; //Поле может быть null
@@ -18,10 +18,10 @@ public class Person {
 
     public void setName(String name) throws IllegalArgumentException {
         if (name == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Имя не может быть null");
         }
         if (name.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Имя не может быть \"");
         }
         this.name = name;
     }
@@ -32,7 +32,7 @@ public class Person {
 
     public void setBirthday(ZonedDateTime birthday) throws IllegalArgumentException {
         if (birthday == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("День рождения не может быть null");
         }
         this.birthday = birthday;
     }
@@ -43,7 +43,7 @@ public class Person {
 
     public void setNationality(Country nationality) {
         if (nationality == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Национальность не может быть null");
         }
         this.nationality = nationality;
     }
@@ -54,6 +54,11 @@ public class Person {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    @Override
+    public int compareTo(Person personObj) {
+        return name.compareTo(personObj.getName());
     }
 
     public static class Builder {
@@ -82,7 +87,6 @@ public class Person {
             newPerson.setLocation(location);
             return this;
         }
-
 
         public Person build() throws IllegalArgumentException {
             if (newPerson.name == null || newPerson.birthday == null || newPerson.nationality == null || newPerson.location == null) {

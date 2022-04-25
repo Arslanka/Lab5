@@ -1,10 +1,16 @@
 package data;
 
 public enum Color {
-    GREEN,
-    BLUE,
-    YELLOW,
-    WHITE;
+    GREEN("GREEN"),
+
+    BLUE("BLUE"),
+
+    YELLOW("YELLOW"),
+
+    WHITE("WHITE");
+
+    Color(String green) {
+    }
 
     public static String nameList() {
         StringBuilder nameList = new StringBuilder();

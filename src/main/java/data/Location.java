@@ -26,32 +26,32 @@ public class Location {
 
     public void setX(Integer x) throws IllegalArgumentException {
         if (x == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Координата X не может быть null");
         }
         this.x = x;
     }
 
     public void setY(Integer y) {
         if (y == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Координата Y не может быть null");
         }
         this.y = y;
     }
 
     public void setZ(Integer z) throws IllegalArgumentException {
         if (z == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Координата Z не может быть null");
         }
         this.z = z;
     }
 
     public void setName(String name) throws IllegalArgumentException { //IncorrectInputException
         if (name == null) {
-            throw new IllegalArgumentException(); //Обернуть эксепшны
+            throw new IllegalArgumentException("Имя не может быть null"); //Обернуть эксепшны
         }
 
         if (name.length() > 346) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Длина имение не может быть больше 346");
         }
         this.name = name;
     }
@@ -89,7 +89,7 @@ public class Location {
 
         public Location build() throws IllegalArgumentException {
             if (newLocation.name == null || newLocation.y == null || newLocation.x == null || newLocation.z == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Вы некорректно заполнили класс. Пожалуйста, попробуйте еще раз");
             }
             return newLocation;
         }

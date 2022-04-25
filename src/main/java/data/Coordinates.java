@@ -15,7 +15,7 @@ public class Coordinates {
 
     public void setX(Integer x) throws IllegalArgumentException {
         if (x == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Координата X не может быть null");
         }
         this.x = x;
     }
@@ -26,17 +26,13 @@ public class Coordinates {
 
     public void setY(Double y) {
         if (y == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Координата Y не может быть null");
         }
+        if (y > 508)
+            throw new IllegalArgumentException("Координата Y не может быть больше 508");
         this.y = y;
     }
 
-   /* public static Coordinates fromJson(Map<String, Object> json) {
-        new Builder()
-                .withX(json.get('x'))
-                .withY(json.get('y'))
-                .build();
-    }*/
 
     public static class Builder {
         private final Coordinates newCoordinates;

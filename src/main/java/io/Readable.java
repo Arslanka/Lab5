@@ -2,6 +2,6 @@ package io;
 
 import java.io.IOException;
 
-public interface IReadable {
+public interface Readable {
     String read() throws IOException;
 }

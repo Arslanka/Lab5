@@ -1,11 +1,13 @@
 package file;
 
+import collection.CollectionManager;
 import com.google.gson.*;
 import data.Dragon;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.jar.JarException;
 
@@ -16,24 +18,21 @@ public class JsonFile {
         this.textFile = textFile;
     }
 
-    public List<Dragon> read() throws IOException, JsonParseException {
+    public Collection<Dragon> read() throws IOException, JsonParseException {
+        Dragon[] dragons;
+        try {
         Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class
                 , (JsonDeserializer<ZonedDateTime>)
                         (json, type, jsonPrimitive)
                                 -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
-        Dragon[] dragons;
-        try {
+
             dragons = gson.fromJson(textFile.read(), Dragon[].class);
-        } catch (JsonParseException e) {
+        } catch (JsonParseException | DateTimeParseException e) {
             throw new JsonParseException("Ошибка парсинга json-файла: данные в файле некорректны.");
         } catch (IOException e) {
             throw new IOException("Невозможно прочитать файл.");
         }
         return new ArrayList<>(Arrays.asList(dragons));
-    }
-
-    public String asString() throws IOException {
-        return textFile.read();
     }
 
     public void write(Set<Dragon> dragonSet) throws IOException, JsonIOException {
