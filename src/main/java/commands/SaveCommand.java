@@ -26,6 +26,16 @@ public class SaveCommand implements Command {
 
     @Override
     public boolean withArgument() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return "save";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Сохраняет коллекцию в файл";
     }
 }

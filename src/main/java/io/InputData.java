@@ -79,15 +79,15 @@ public class InputData {
     public Long getAge(String age) {
         try {
             return (age.equals("") ? null : Long.parseLong(age));
-        } catch (InputMismatchException e) {
-            throw new IllegalStateException("Вы ввели некорректный тип. Пожалуйста, введите тип еще раз");
+        } catch (InputMismatchException | NumberFormatException e) {
+            throw new IllegalStateException("Вы ввели некорректный возраст. Пожалуйста, введите тип еще раз");
         }
     }
 
     public Float getWeight(String weight) {
         try {
             return (weight.equals("") ? null : Float.parseFloat(weight));
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             throw new IllegalStateException("Вы ввели некорректный вес. Пожалуйста, введите вес еще раз");
         }
     }
@@ -95,7 +95,7 @@ public class InputData {
     public Integer getId(String id) {
         try {
             return (id.equals("") ? null : Integer.parseInt(id));
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             throw new IllegalStateException("Вы ввели некорректный id. Пожалуйста, введите id еще раз");
         }
     }

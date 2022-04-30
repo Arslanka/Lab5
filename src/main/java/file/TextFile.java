@@ -48,4 +48,9 @@ public class TextFile implements Readable, Writeable {
         streamWriter.write(string);
         streamWriter.close();
     }
+
+    @Override
+    public String toString() {
+        return file.toString();
+    }
 }

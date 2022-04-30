@@ -18,4 +18,16 @@ public class ClearCommand implements Command {
     public boolean withArgument() {
         return false;
     }
+
+    @Override
+    public String getName() {
+        return "clear";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Очищает коллекцию";
+    }
+
+
 }

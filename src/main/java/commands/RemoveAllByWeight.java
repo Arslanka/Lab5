@@ -27,4 +27,14 @@ public class RemoveAllByWeight implements Command {
     public boolean withArgument() {
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "remove_all_by_weight";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Удаляет из коллекции все элементы, значение поля weight которых эквивалентно заданному";
+    }
 }

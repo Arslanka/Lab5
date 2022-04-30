@@ -27,4 +27,14 @@ public class AddIfMaxCommand implements Command {
     public boolean withArgument() {
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "add_if_max";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Добавляет новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции";
+    }
 }

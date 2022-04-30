@@ -7,35 +7,40 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Supplier;
 
 import static io.ConsoleColor.RED;
 
 public class RequestElement {
     private final Map<String, Command> commandMap;
     private final Scanner sc;
+    private final Printer printer;
+    private final  Map<String, Supplier<Object[]>> supplierMap;
 
-    public RequestElement(Map<String, Command> commandMap, Scanner sc) {
+    public RequestElement(Map<String, Command> commandMap, Map<String, Supplier<Object[]>> supplierMap, Scanner sc, Printer printer) {
         this.commandMap = commandMap;
         this.sc = sc;
+        this.printer = printer;
+        this.supplierMap = supplierMap;
     }
 
 
-    public boolean run(String commandAsString) throws NullPointerException, FileNotFoundException {
+    public boolean run(String commandAsString) throws NullPointerException, FileNotFoundException { //todo printer
         try {
+            if (Objects.equals(commandAsString, "exit"))
+                return true;
             if (!commandMap.containsKey(commandAsString)) {
-                System.out.println(RED.wrapped("Такой команды не существует. Пожалуйста, введите команду еще раз."));
+                printer.println(("Такой команды не существует. Пожалуйста, введите команду еще раз."), RED);
                 return false;
             }
             Command command = commandMap.get(commandAsString);
             if (command.withArgument()) {
-                command.execute(new CommandArgument(commandAsString, commandMap, sc).get());
+                command.execute(new CommandArgument(commandAsString, supplierMap).get());
                 return false;
             }
-            if (Objects.equals(commandAsString, "exit"))
-                return true;
             command.execute();
         } catch (NoSuchElementException e) {
-            System.out.println(RED.wrapped(e.getMessage()));
+            printer.println(e.getMessage(), RED);
         }
         return false;
     }

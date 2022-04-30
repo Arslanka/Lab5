@@ -27,4 +27,14 @@ public class AddCommand implements Command {
         return true;
     }
 
+    @Override
+    public String getName() {
+        return "add";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Добавляет элемент в коллекцию";
+    }
+
 }

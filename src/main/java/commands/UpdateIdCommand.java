@@ -18,7 +18,7 @@ public class UpdateIdCommand implements Command {
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(RED.wrapped("Вы не ввели элемент, который необходимо добавить в коллекцию." +
                     " Пожалуйста, попробуйте еще раз"));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.out.println(RED.wrapped(e.getMessage()));
         }
     }
@@ -26,5 +26,15 @@ public class UpdateIdCommand implements Command {
     @Override
     public boolean withArgument() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return "update";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Обновляет значение элемента коллекции, id которого равен заданному";
     }
 }

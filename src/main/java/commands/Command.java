@@ -4,8 +4,8 @@ public interface Command {
     void execute(Object... args);
 
     boolean withArgument();
-//
-//    String getName();
-//
-//    String getDescription();
+
+    String getName();
+
+    String getDescription();
 }

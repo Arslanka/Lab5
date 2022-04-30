@@ -18,4 +18,14 @@ public class ShowCommand implements Command {
     public boolean withArgument() {
         return false;
     }
+
+    @Override
+    public String getName() {
+        return "show";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Выводит все элементы коллекции";
+    }
 }

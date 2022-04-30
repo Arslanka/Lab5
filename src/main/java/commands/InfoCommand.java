@@ -18,4 +18,14 @@ public class InfoCommand implements Command {
     public boolean withArgument() {
         return false;
     }
+
+    @Override
+    public String getName() {
+        return "info";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Выводит информацию о коллекции";
+    }
 }

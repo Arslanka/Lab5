@@ -21,10 +21,10 @@ public class JsonFile {
     public Collection<Dragon> read() throws IOException, JsonParseException {
         Dragon[] dragons;
         try {
-        Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class
-                , (JsonDeserializer<ZonedDateTime>)
-                        (json, type, jsonPrimitive)
-                                -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
+            Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class
+                    , (JsonDeserializer<ZonedDateTime>)
+                            (json, type, jsonPrimitive)
+                                    -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
 
             dragons = gson.fromJson(textFile.read(), Dragon[].class);
         } catch (JsonParseException | DateTimeParseException e) {
@@ -41,5 +41,10 @@ public class JsonFile {
                                 -> new JsonPrimitive(date.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)))
                 .setPrettyPrinting().create();
         textFile.write(gson.toJson(dragonSet));
+    }
+
+    @Override
+    public String toString() {
+        return "textFile=" + textFile;
     }
 }

@@ -27,4 +27,14 @@ public class RemoveLowerCommand implements Command {
     public boolean withArgument() {
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "remove_lower";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Удаляет из коллекции все элементы, меньшие, чем заданный";
+    }
 }

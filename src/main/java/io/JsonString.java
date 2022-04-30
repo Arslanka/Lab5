@@ -1,14 +1,11 @@
 package io;
 
-import data.Coordinates;
-import data.Dragon;
-import data.Location;
-import data.Person;
+import data.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.*;
 
 public class JsonString {
     private final InputData inputData;
@@ -23,25 +20,26 @@ public class JsonString {
 
     public Coordinates.Builder getCoordinates() {
         Coordinates.Builder coordinatesBuilder = new Coordinates.Builder();
-        printer.printDescription("Coordinates");
+        printer.println("Введите данные для создания объекта Coordinates :", BLUE); //??
         getCoordinate(coordinatesBuilder, 'X', false);
         getCoordinate(coordinatesBuilder, 'Y', true);
         return coordinatesBuilder;
     }
 
-    public Coordinates.Builder getCoordinate(Coordinates.Builder coordinatesBuilder, char cName, boolean isDouble) {
+    public void getCoordinate(Coordinates.Builder coordinatesBuilder, char cName, boolean isDouble) {
         while (true) {
             try {
-                printer.printCoordinate(cName);
+                printer.print("   Введите координату " + cName + ':', PURPLE);
                 if (!isDouble) {
-                    Integer coordinate = inputData.getIntCoordinate(sc.nextLine().trim().toLowerCase(), cName);
-                    return coordinatesBuilder.withX(coordinate);
+                    Integer coordinate = inputData.getIntCoordinate(sc.nextLine().trim(), cName);
+                    coordinatesBuilder.withX(coordinate);
                 } else {
-                    Double coordinate = inputData.getDoubleCoordinate(sc.nextLine().trim().toLowerCase(), cName);
-                    return coordinatesBuilder.withY(coordinate);
+                    Double coordinate = inputData.getDoubleCoordinate(sc.nextLine().trim(), cName);
+                    coordinatesBuilder.withY(coordinate);
                 }
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -49,7 +47,7 @@ public class JsonString {
 
     public Person.Builder getPerson() {
         Person.Builder personBuilder = new Person.Builder();
-        printer.printDescription("Person");
+        printer.println("Введите данные для создания объекта " + "Person" + ":", BLUE);
         getName(personBuilder);
         getBirthday(personBuilder);
         getNationality(personBuilder);
@@ -57,12 +55,13 @@ public class JsonString {
         return personBuilder;
     }
 
-    public Person.Builder getLocation(Person.Builder personBuilder) {
+    public void getLocation(Person.Builder personBuilder) {
         while (true) {
             try {
-                return personBuilder.withLocation(getLocation().build());
+                personBuilder.withLocation(getLocation().build());
+                return;
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -70,32 +69,35 @@ public class JsonString {
     public Person.Builder getName(Person.Builder personBuilder) { //TODO Реализовать интерфейс BUILDER
         while (true) {
             try {
-                printer.printName();
-                return personBuilder.withName(inputData.getName(sc.nextLine().trim().toLowerCase()));
+                printer.print("   Введите имя:", PURPLE);
+                return personBuilder.withName(inputData.getName(sc.nextLine().trim()));
+            } catch (IllegalStateException | IllegalArgumentException e) {
+                printer.println(e.getMessage(), RED);
+            }
+        }
+    }
+
+    public void getBirthday(Person.Builder personBuilder) { //TODO Реализовать интерфейс BUILDER
+        while (true) {
+            try {
+                printer.print("   Введите дату и время рождения  в формате: yyyy-MM-dd HH:mm:ss a z:", PURPLE);
+                personBuilder.withBirthday(inputData.getDateTime(sc.nextLine().trim()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
                 System.out.println(RED.wrapped(e.getMessage()));
             }
         }
     }
 
-    public Person.Builder getBirthday(Person.Builder personBuilder) { //TODO Реализовать интерфейс BUILDER
+    public void getNationality(Person.Builder personBuilder) { //Реализовать интерфейс BUILDER
         while (true) {
             try {
-                printer.printDateTime(true);
-                return personBuilder.withBirthday(inputData.getDateTime(sc.nextLine().trim().toLowerCase()));
+                printer.println("   Возможные национальности: " + Country.nameList(), CYAN);
+                printer.print("   Введите национальность:", PURPLE);
+                personBuilder.withNationality(inputData.getNationality(sc.nextLine().trim().toUpperCase()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
-            }
-        }
-    }
-
-    public Person.Builder getNationality(Person.Builder personBuilder) { //Реализовать интерфейс BUILDER
-        while (true) {
-            try {
-                printer.printNationality();
-                return personBuilder.withNationality(inputData.getNationality(sc.nextLine().trim().toUpperCase()));
-            } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -109,18 +111,22 @@ public class JsonString {
         return locationBuilder;
     }
 
-    public Location.Builder getInt(Location.Builder locationBuilder, char cName) {
+    public void getInt(Location.Builder locationBuilder, char cName) {
         while (true) {
             try {
-                printer.printCoordinate(cName);
+                printer.print("   Введите координату " + cName + ':', PURPLE);
                 if (cName == 'X') {
-                    return locationBuilder.withX(inputData.getIntCoordinate(sc.nextLine().trim().toLowerCase(), cName));
+                    locationBuilder.withX(inputData.getIntCoordinate(sc.nextLine().trim(), cName));
+                    return;
                 } else if (cName == 'Y') {
-                    return locationBuilder.withY(inputData.getIntCoordinate(sc.nextLine().trim().toLowerCase(), cName));
-                } else if (cName == 'Z')
-                    return locationBuilder.withZ(inputData.getIntCoordinate(sc.nextLine().trim().toLowerCase(), cName));
+                    locationBuilder.withY(inputData.getIntCoordinate(sc.nextLine().trim(), cName));
+                    return;
+                } else if (cName == 'Z') {
+                    locationBuilder.withZ(inputData.getIntCoordinate(sc.nextLine().trim(), cName));
+                    return;
+                }
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -128,17 +134,17 @@ public class JsonString {
     public Location.Builder getName(Location.Builder locationBuilder) {
         while (true) {
             try {
-                printer.printName();
-                return locationBuilder.withName(inputData.getName(sc.nextLine().trim().toLowerCase()));
+                printer.print("   Введите имя:", PURPLE);
+                return locationBuilder.withName(inputData.getName(sc.nextLine().trim()));
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
     public Dragon.Builder getDragon() {
         Dragon.Builder dragonBuilder = new Dragon.Builder();
-        printer.printDescription("Dragon");
+        printer.println("Введите данные для создания объекта Dragon:", BLUE);
         getName(dragonBuilder);
         getCoordinates(dragonBuilder);
         getAge(dragonBuilder);
@@ -149,46 +155,52 @@ public class JsonString {
         return dragonBuilder;
     }
 
-    public Dragon.Builder getAge(Dragon.Builder dragonBuilder) {
+    public void getAge(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                printer.printAge();
-                return dragonBuilder.withAge(inputData.getAge(sc.nextLine().trim().toLowerCase()));
+                printer.print("   Введите возраст:", PURPLE);
+                dragonBuilder.withAge(inputData.getAge(sc.nextLine().trim()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
-    public Dragon.Builder getWeight(Dragon.Builder dragonBuilder) {
+    public void getWeight(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                printer.printWeight();
-                return dragonBuilder.withWeight(inputData.getWeight(sc.nextLine().trim().toLowerCase()));
+                printer.print("   Введите вес:", PURPLE);
+                dragonBuilder.withWeight(inputData.getWeight(sc.nextLine().trim()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
-    public Dragon.Builder getColor(Dragon.Builder dragonBuilder) {
+    public void getColor(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                printer.printColor();
-                return dragonBuilder.withColor(inputData.getColor(sc.nextLine().trim().toUpperCase()));
+                printer.println("   Возможные цвета: " + Color.nameList(), CYAN);
+                printer.print("   Введите цвет:", PURPLE);
+                dragonBuilder.withColor(inputData.getColor(sc.nextLine().trim().toUpperCase()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
-    public Dragon.Builder getType(Dragon.Builder dragonBuilder) {
+    public void getType(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                printer.printType();
-                return dragonBuilder.withType(inputData.getType(sc.nextLine().trim().toUpperCase()));
+                printer.println("   Возможные типы: " + DragonType.nameList(), CYAN);
+                printer.print("   Введите тип:", PURPLE);
+                dragonBuilder.withType(inputData.getType(sc.nextLine().trim().toUpperCase()));
+                return;
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -196,30 +208,32 @@ public class JsonString {
     public Dragon.Builder getName(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                printer.printName();
-                return dragonBuilder.withName(inputData.getName(sc.nextLine().trim().toLowerCase()));
+                printer.print("   Введите имя:", PURPLE);
+                return dragonBuilder.withName(inputData.getName(sc.nextLine().trim()));
             } catch (IllegalStateException | IllegalArgumentException e) {
-                System.out.println(RED.wrapped(e.getMessage()));
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
-    public Dragon.Builder getCoordinates(Dragon.Builder dragonBuilder) {
+    public void getCoordinates(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                return dragonBuilder.withCoordinates(getCoordinates().build());
+                dragonBuilder.withCoordinates(getCoordinates().build());
+                return;
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }
 
-    public Dragon.Builder getPerson(Dragon.Builder dragonBuilder) {
+    public void getPerson(Dragon.Builder dragonBuilder) {
         while (true) {
             try {
-                return dragonBuilder.withPerson(getPerson().build());
+                dragonBuilder.withPerson(getPerson().build());
+                return;
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -227,10 +241,10 @@ public class JsonString {
     public Integer getId() {
         while (true) {
             try {
-                printer.printId();
+                printer.print("   Введите id:", PURPLE);
                 return inputData.getId(sc.nextLine().trim().toLowerCase());
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -238,10 +252,10 @@ public class JsonString {
     public Float getWeight() {
         while (true) {
             try {
-                printer.printWeight();
-                return inputData.getWeight(sc.nextLine().trim().toLowerCase());
+                printer.print("   Введите вес:", PURPLE);
+                return inputData.getWeight(sc.nextLine().trim());
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }
@@ -249,10 +263,10 @@ public class JsonString {
     public Long getAge() {
         while (true) {
             try {
-                printer.printAge();
-                return inputData.getAge(sc.nextLine().trim().toLowerCase());
+                printer.print("   Введите возраст:", PURPLE);
+                return inputData.getAge(sc.nextLine().trim());
             } catch (IllegalArgumentException | InputMismatchException e) {
-                System.out.println(e.getMessage());
+                printer.println(e.getMessage(), RED);
             }
         }
     }

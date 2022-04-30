@@ -25,6 +25,16 @@ public class CountGreaterThanKillerCommand implements Command {
 
     @Override
     public boolean withArgument() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return "count_greater_than_killer";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Выводит количество элементов, значение поля killer которых больше заданного";
     }
 }

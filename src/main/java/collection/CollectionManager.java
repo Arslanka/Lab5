@@ -9,34 +9,33 @@ import io.Printer;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static io.ConsoleColor.*;
 
 public class CollectionManager {
     private final HashSet<Dragon> dragonHashSet = new HashSet<>();
     private final Printer printer = new Printer();
-    public static final TreeMap idMap = new TreeMap();//TODO GENERICS
+    public static final TreeMap<Object, Dragon> idMap = new TreeMap<>();
     private final LocalDateTime creationDate = LocalDateTime.now();
 
     public CollectionManager() {
     }
 
-    public boolean add(Dragon dragon) {
+    public void add(Dragon dragon) {
         Object dragonId = dragon.getId();
         if (idMap.containsKey(dragonId))
             throw new NoSuchElementException("В коллекции уже есть объект с id " + dragonId + ". Пожалуйста, введите другое id");
-        else {
-            idMap.put(dragonId, dragon);
-            return dragonHashSet.add(dragon);
-        }
+        idMap.put(dragonId, dragon);
+        dragonHashSet.add(dragon);
     }
 
     public void add(Collection<Dragon> dragonList) {
-        for (Dragon dragon : dragonList) {
-            add(dragon);
-        }
+        dragonList.forEach(this::add);
     }
 
     public void show() {
-        printer.print(dragonHashSet);
+        printer.printCollection(dragonHashSet, BLUE);
     }
 
     public void updateId(Object id, Object obj) {
@@ -52,70 +51,70 @@ public class CollectionManager {
     public void removeById(Integer id) {
         if (!idMap.containsKey(id))
             throw new IllegalArgumentException("Такого id нет в коллекции. Исполните команду с корректным id.");
-        dragonHashSet.remove((Dragon) idMap.get(id));
+        dragonHashSet.remove(idMap.get(id));
         idMap.remove(id);
     }
 
     public void clear() {
         dragonHashSet.clear();
+        printer.println("Коллекция успешно очищена", CYAN);
     }
 
     public void save(JsonFile jsonFile) throws IOException {
         jsonFile.write(dragonHashSet);
+        printer.println("Коллекция сохранена в файл " + jsonFile, CYAN);
     }
 
     public void removeLower(Object dragonObj) {
         Dragon dragon = (Dragon) dragonObj;
         dragonHashSet.removeIf(d -> d.compareTo(dragon) < 0);
-        for (Object id : idMap.keySet()) {
-            Dragon curDragon = (Dragon) idMap.get(id);
-            if (curDragon.compareTo(dragon) < 0) idMap.remove(id);
-        }
+        idMap
+             .keySet()
+             .removeIf(id -> idMap.get(id).compareTo(dragon) < 0);
     }
 
     public void removeGreater(Object dragonObj) {
         Dragon dragon = (Dragon) dragonObj;
         dragonHashSet.removeIf(d -> d.compareTo(dragon) > 0);
-        for (Object id : idMap.keySet()) {
-            Dragon curDragon = (Dragon) idMap.get(id);
-            if (curDragon.compareTo(dragon) > 0) idMap.remove(id);
-        }
+        idMap
+             .keySet()
+             .removeIf(id -> idMap.get(id).compareTo(dragon) > 0);
     }
 
     public void removeByWeight(Object weightObj) {
         Float weight = (Float) weightObj;
         dragonHashSet.removeIf(d -> (Objects.equals(d.getWeight(), weight)));
-        for (Object id : idMap.keySet()) {
-            Dragon curDragon = (Dragon) idMap.get(id);
-            if (Objects.equals(curDragon.getWeight(), weight)) idMap.remove(id);
-        }
+        idMap
+             .keySet()
+             .removeIf(id -> Objects.equals(idMap.get(id).getWeight(), weight));
     }
 
 
     public void info() {
         String collectionName = "HashSet<Dragon> dragonHashSet";
-        System.out.println("Тип коллекции:" + collectionName);
-        System.out.println("Дата и время создания коллекции" + creationDate);
-        System.out.println("Размер коллекции:" + dragonHashSet.size());
+        printer.println(collectionName, CYAN);
+        printer.println(collectionName, CYAN);
+        printer.println("Тип коллекции: " + collectionName, CYAN);
+        printer.println("Дата и время создания коллекции " + creationDate, CYAN);
+        printer.println("Размер коллекции: " + dragonHashSet.size(), CYAN);
     }
 
     public void filterGreaterThanAge(Object ageObj) {
-        System.out.println("Элементы коллекции, у которых поле age больше заданного – ");
+        printer.print("Элементы коллекции, у которых поле age больше заданного – ", CYAN); //TODO stream API
         Long age = (Long) ageObj;
-        for (Dragon d : dragonHashSet) {
-            if (d.getAge() > age)
-                System.out.println(d);
-        }
+        dragonHashSet
+                .stream()
+                .filter(d -> d.getAge() > age)
+                .forEach(d -> printer.println(d, BLUE));
     }
 
     public void countGreaterThanKiller(Object personObj) {
         Person killer = (Person) personObj;
-        int cnt = 0;
-        for (Dragon d : dragonHashSet) {
-            if (d.getKiller().compareTo(killer) > 0)
-                ++cnt;
-        }
-        System.out.println("Элементов коллекции, у которых поле killer больше заданного – " + cnt);
+        long cnt = dragonHashSet
+                                .stream()
+                                .filter(d -> d.getKiller().compareTo(killer) > 0)
+                                .count();
+        printer.println("Элементов коллекции, у которых поле killer больше заданного – " + cnt, CYAN);
     }
 
     public void addIfMax(Object dragonObj) {

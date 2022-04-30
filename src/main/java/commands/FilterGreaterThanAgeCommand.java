@@ -27,4 +27,14 @@ public class FilterGreaterThanAgeCommand implements Command {
     public boolean withArgument() {
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "filter_greater_than_age";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Выводит элементы, значение поля age которых больше заданного";
+    }
 }

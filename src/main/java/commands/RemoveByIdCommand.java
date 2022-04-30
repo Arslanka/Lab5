@@ -27,4 +27,14 @@ public class RemoveByIdCommand implements Command {
     public boolean withArgument() {
         return true;
     }
+
+    @Override
+    public String getName() {
+        return "remove_by_id";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Удаляет элемент из коллекции по его id";
+    }
 }
