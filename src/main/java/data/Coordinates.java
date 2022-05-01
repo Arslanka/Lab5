@@ -59,6 +59,12 @@ public class Coordinates {
         }
     }
 
+    public Coordinates isValid() {
+        setX(this.x);
+        setY(this.y);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

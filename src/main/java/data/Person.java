@@ -96,6 +96,14 @@ public class Person implements Comparable<Person> {
         }
     }
 
+    public Person isValid() {
+        setName(this.name);
+        setBirthday(this.birthday);
+        setNationality(this.nationality);
+        setLocation(this.location.isValid());
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

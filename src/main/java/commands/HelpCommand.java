@@ -18,7 +18,7 @@ public class HelpCommand implements Command {
     public void execute(Object... args) {
         HashMap<String, Command> commandMap = (HashMap<String, Command>) args[0];
         for (String entry : commandMap.keySet()) {
-            printer.print(String.format("%s\t|\t%s\n", entry, commandMap.get(entry).getDescription()), CYAN);
+            printer.println((String.format("%-30s", entry) + " "  + commandMap.get(entry).getDescription()), CYAN);
         }
     }
 

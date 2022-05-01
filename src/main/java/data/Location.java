@@ -95,6 +95,14 @@ public class Location {
         }
     }
 
+    public Location isValid() {
+        setX(this.x);
+        setY(this.y);
+        setZ(this.z);
+        setName(this.name);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

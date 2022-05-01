@@ -3,12 +3,14 @@ package collection;
 import data.Dragon;
 import data.Person;
 import file.JsonFile;
-import io.JsonString;
 import io.Printer;
+import io.request.RequestDragon;
+import io.request.RequestElement;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static io.ConsoleColor.*;
@@ -31,6 +33,16 @@ public class CollectionManager {
     }
 
     public void add(Collection<Dragon> dragonList) {
+        int dragonCount = 0; //Todo change
+        for (Dragon d : dragonList) {
+            try {
+                if (d.isValid()) {
+                    ++dragonCount;
+                }
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(e.getMessage() + '\n' + ((dragonCount + 1) + " элемент файла не валиден"));
+            }
+        }
         dragonList.forEach(this::add);
     }
 
@@ -41,8 +53,8 @@ public class CollectionManager {
     public void updateId(Object id, Object obj) {
         if (!idMap.containsKey(id)) throw new IllegalArgumentException("Вы ввели некорректный id.");
         dragonHashSet.remove(idMap.get(id));
-        JsonString jsonString = (JsonString) obj;
-        Dragon curDragon = jsonString.getDragon().build();
+        RequestDragon requestDragon = (RequestDragon) obj;
+        Dragon curDragon = requestDragon.get().build();
         curDragon.setId((Integer) id);
         idMap.put(id, curDragon);
         dragonHashSet.add(curDragon);
@@ -69,24 +81,24 @@ public class CollectionManager {
         Dragon dragon = (Dragon) dragonObj;
         dragonHashSet.removeIf(d -> d.compareTo(dragon) < 0);
         idMap
-             .keySet()
-             .removeIf(id -> idMap.get(id).compareTo(dragon) < 0);
+                .keySet()
+                .removeIf(id -> idMap.get(id).compareTo(dragon) < 0);
     }
 
     public void removeGreater(Object dragonObj) {
         Dragon dragon = (Dragon) dragonObj;
         dragonHashSet.removeIf(d -> d.compareTo(dragon) > 0);
         idMap
-             .keySet()
-             .removeIf(id -> idMap.get(id).compareTo(dragon) > 0);
+                .keySet()
+                .removeIf(id -> idMap.get(id).compareTo(dragon) > 0);
     }
 
     public void removeByWeight(Object weightObj) {
         Float weight = (Float) weightObj;
         dragonHashSet.removeIf(d -> (Objects.equals(d.getWeight(), weight)));
         idMap
-             .keySet()
-             .removeIf(id -> Objects.equals(idMap.get(id).getWeight(), weight));
+                .keySet()
+                .removeIf(id -> Objects.equals(idMap.get(id).getWeight(), weight));
     }
 
 
@@ -104,16 +116,17 @@ public class CollectionManager {
         Long age = (Long) ageObj;
         dragonHashSet
                 .stream()
-                .filter(d -> d.getAge() > age)
+                // TODO: error comparison
+                .filter(d -> age.compareTo(d.getAge()) > 0)
                 .forEach(d -> printer.println(d, BLUE));
     }
 
     public void countGreaterThanKiller(Object personObj) {
         Person killer = (Person) personObj;
         long cnt = dragonHashSet
-                                .stream()
-                                .filter(d -> d.getKiller().compareTo(killer) > 0)
-                                .count();
+                .stream()
+                .filter(d -> d.getKiller().compareTo(killer) > 0)
+                .count();
         printer.println("Элементов коллекции, у которых поле killer больше заданного – " + cnt, CYAN);
     }
 

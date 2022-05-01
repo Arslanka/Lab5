@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "name": "дщч",
+    "name": "kanat",
     "coordinates": {
       "x": 412,
-      "y": 23.0
+      "y": 23
     },
     "creationDate": "2011-12-03T10:15:30+01:00",
     "age": 18,
-    "weight": 65.5,
+    "weight": 1010,
     "color": "GREEN",
     "type": "FIRE",
     "killer": {
@@ -25,10 +25,10 @@
   },
   {
     "id": 2,
-    "name": "Amir",
+    "name": "1010",
     "coordinates": {
       "x": 123,
-      "y": 444.0
+      "y": 444
     },
     "creationDate": "2011-12-03T10:15:30+01:00",
     "age": 18,
@@ -52,7 +52,7 @@
     "name": "Roma",
     "coordinates": {
       "x": 412,
-      "y": 23.0
+      "y": 23
     },
     "creationDate": "2011-12-03T10:15:30+01:00",
     "age": 23,

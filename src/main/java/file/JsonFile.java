@@ -5,6 +5,7 @@ import com.google.gson.*;
 import data.Dragon;
 
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -30,7 +31,7 @@ public class JsonFile {
         } catch (JsonParseException | DateTimeParseException e) {
             throw new JsonParseException("Ошибка парсинга json-файла: данные в файле некорректны.");
         } catch (IOException e) {
-            throw new IOException("Невозможно прочитать файл.");
+            throw new IOException("Невозможно прочитать файл. " + e.getMessage());
         }
         return new ArrayList<>(Arrays.asList(dragons));
     }

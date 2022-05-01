@@ -11,15 +11,13 @@ import java.util.function.Supplier;
 
 import static io.ConsoleColor.RED;
 
-public class RequestElement {
+public class ExCommand { //TODO implements runnable
     private final Map<String, Command> commandMap;
-    private final Scanner sc;
     private final Printer printer;
-    private final  Map<String, Supplier<Object[]>> supplierMap;
+    private final Map<String, Supplier<Object[]>> supplierMap;
 
-    public RequestElement(Map<String, Command> commandMap, Map<String, Supplier<Object[]>> supplierMap, Scanner sc, Printer printer) {
+    public ExCommand(Map<String, Command> commandMap, Map<String, Supplier<Object[]>> supplierMap, Scanner sc, Printer printer) {
         this.commandMap = commandMap;
-        this.sc = sc;
         this.printer = printer;
         this.supplierMap = supplierMap;
     }

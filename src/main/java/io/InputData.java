@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class InputData {
@@ -35,19 +36,19 @@ public class InputData {
         }
     }
 
-    public Integer getIntCoordinate(String intCoordinate, char cName) {
+    public Integer getIntCoordinate(String intCoordinate) {
         try {
             return (intCoordinate.equals("") ? null : Integer.parseInt(intCoordinate));
         } catch (InputMismatchException | NumberFormatException | IllegalStateException e) {
-            throw new IllegalStateException("Вы ввели некорректную координату " + cName + ". Пожалуйста, введите  координату еще раз");
+            throw new IllegalStateException("Вы ввели некорректную координату" + ". Пожалуйста, введите  координату еще раз");
         }
     }
 
-    public Double getDoubleCoordinate(String doubleCoordinate, char cName) {
+    public Double getDoubleCoordinate(String doubleCoordinate) {
         try {
             return (doubleCoordinate.equals("") ? null : Double.parseDouble(doubleCoordinate));
         } catch (InputMismatchException | NumberFormatException | IllegalStateException e) {
-            throw new IllegalStateException("Вы ввели некорректную координату с плавающей точкой " + cName + ". Пожалуйста, введите координату еще раз");
+            throw new IllegalStateException("Вы ввели некорректную координату с плавающей точкой"  + ". Пожалуйста, введите координату еще раз");
         }
     }
 
@@ -62,7 +63,7 @@ public class InputData {
 
     public Color getColor(String color) {
         try {
-            return Color.valueOf(color);
+            return Color.valueOf(color.toUpperCase());
         } catch (InputMismatchException | IllegalArgumentException e) {
             throw new IllegalStateException("Вы ввели некорректный цвет. Пожалуйста, введите цвет еще раз");
         }
@@ -80,7 +81,7 @@ public class InputData {
         try {
             return (age.equals("") ? null : Long.parseLong(age));
         } catch (InputMismatchException | NumberFormatException e) {
-            throw new IllegalStateException("Вы ввели некорректный возраст. Пожалуйста, введите тип еще раз");
+                throw new IllegalStateException("Вы ввели некорректный возраст. Пожалуйста, введите возраст еще раз");
         }
     }
 

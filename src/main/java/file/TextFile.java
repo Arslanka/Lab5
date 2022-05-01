@@ -6,16 +6,19 @@ import io.Writeable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystemException;
 
 public class TextFile implements Readable, Writeable {
     private final File file;
+    private static final int MAX_FILE_LENGTH = 10000;
 
     public TextFile(File file) throws FileNotFoundException, FileReadPermissionException {
+        // TODO: specify file size limit (/dev/random)
         this.file = file;
         if (!file.exists()) {
             throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста введите корректные данные");
         }
-        if (file.exists() && file.isDirectory()) {
+        if (file.isDirectory()) {
             throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста введите корректные данные");
         }
         if (!file.canRead()) {
@@ -33,6 +36,8 @@ public class TextFile implements Readable, Writeable {
                 break;
             }
             builder.append((char) ch);
+            if (builder.length() > MAX_FILE_LENGTH)
+                throw new FileSystemException("Количество символов в файле превышает лимит – " + MAX_FILE_LENGTH);
         }
         in.close();
         if (builder.toString().isEmpty()) {
@@ -43,8 +48,9 @@ public class TextFile implements Readable, Writeable {
 
     @Override
     public void write(String string) throws IOException {
-        final OutputStreamWriter streamWriter = new OutputStreamWriter(new FileOutputStream(this.file)
-                , StandardCharsets.UTF_8);
+        final OutputStreamWriter streamWriter
+                = new OutputStreamWriter(
+                new FileOutputStream(this.file), StandardCharsets.UTF_8);
         streamWriter.write(string);
         streamWriter.close();
     }

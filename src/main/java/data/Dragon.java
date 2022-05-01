@@ -35,7 +35,7 @@ public class Dragon implements Comparable<Dragon> {
             throw new IllegalArgumentException("Имя не может быть null");
         }
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Имя не может быть \"");
+            throw new IllegalArgumentException("Имя не может быть \"\"");
         }
         this.name = name;
     }
@@ -166,11 +166,22 @@ public class Dragon implements Comparable<Dragon> {
             if (newDragon.name == null || newDragon.creationDate == null || newDragon.coordinates == null ||
                     newDragon.id == null || newDragon.age == null
                     || newDragon.color == null || newDragon.weight == null || newDragon.killer.getName() == null) {
-                ;
+                throw new IllegalArgumentException("Вы ввели некорректные данные");
             }
             return newDragon;
         }
 
+    }
+
+    public boolean isValid() {
+        setName(this.name);
+        setCoordinates(this.coordinates.isValid());
+        setAge(this.age);
+        setWeight(this.weight);
+        setColor(this.color);
+        setType(this.type);
+        setKiller(this.killer.isValid());
+        return true;
     }
 
 
