@@ -1,0 +1,24 @@
+count_greater_than_killer
+
+{
+                                "name": "Zhenya",
+                                "birthday": "2011-12-03T10:15:30+01:00",
+                                "nationality": "GERMANY",
+                                "location": {
+                                  "x": 10,
+                                  "y": 20,
+                                  "z": 30,
+                                  "name": "Alpi"
+                                }
+                              }
+
+show
+                              help
+
+
+
+                                                    info
+
+
+
+                                       exit
