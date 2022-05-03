@@ -1,27 +1,39 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
 import file.JsonFile;
+import file.TextFile;
+import io.Printer;
 
+import java.io.File;
 import java.io.IOException;
 
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.CYAN;
 import static io.ConsoleColor.RED;
 
 public class SaveCommand implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
 
-    public SaveCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public SaveCommand(Collection collection, Printer printer) {
+
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
+    public boolean execute(Object... args) {
         try {
-            collectionManager.save((JsonFile) args[0]);
+            collection.save((JsonFile) args[0]);
+            printer.println("Коллекция сохранена в файл " + args[0], CYAN);
+            printer.println(SEPARATOR, RED);
+
         } catch (ArrayIndexOutOfBoundsException | IOException e) {
-            System.out.println(RED.wrapped("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз"));
+            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
+                    " Пожалуйста, попробуйте еще раз");
         }
+        return true;
     }
 
     @Override
@@ -37,5 +49,10 @@ public class SaveCommand implements Command {
     @Override
     public String getDescription() {
         return "Сохраняет коллекцию в файл";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{TextFile.class};
     }
 }

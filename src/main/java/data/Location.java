@@ -88,9 +88,9 @@ public class Location {
         }
 
         public Location build() throws IllegalArgumentException {
-            if (newLocation.name == null || newLocation.y == null || newLocation.x == null || newLocation.z == null) {
-                throw new IllegalArgumentException("Вы некорректно заполнили класс. Пожалуйста, попробуйте еще раз");
-            }
+//            if (newLocation.name == null || newLocation.y == null || newLocation.x == null || newLocation.z == null) {
+//                throw new IllegalArgumentException("Вы некорректно заполнили класс. Пожалуйста, попробуйте еще раз");
+//            }
             return newLocation;
         }
     }

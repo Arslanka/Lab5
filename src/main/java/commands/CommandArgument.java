@@ -1,18 +1,8 @@
 package commands;
 
-import file.JsonFile;
-import file.TextFile;
-import io.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.Supplier;
-
-import static io.ConsoleColor.BLUE;
 
 
 public class CommandArgument {

@@ -3,17 +3,12 @@ package io;
 
 import data.Dragon;
 
-import java.io.PrintStream;
 import java.util.Collection;
-
-import static io.ConsoleColor.*;
 
 public class Printer {
 
     public void printCollection(Collection<Dragon> collection, ConsoleColor color) {
-        for (Dragon d : collection) {
-            println(d, color);
-        }
+        collection.forEach(d -> println(d, color));
     }
 
 

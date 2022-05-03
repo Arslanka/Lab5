@@ -1,17 +1,25 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
+import io.Printer;
+
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.RED;
 
 public class InfoCommand implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
+    public InfoCommand(Collection collection, Printer printer) {
 
-    public InfoCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
-        collectionManager.info();
+    public boolean execute(Object... args) {
+        collection.info();
+        printer.println(SEPARATOR, RED);
+        return true;
     }
 
     @Override
@@ -27,5 +35,10 @@ public class InfoCommand implements Command {
     @Override
     public String getDescription() {
         return "Выводит информацию о коллекции";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{};
     }
 }

@@ -1,17 +1,26 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
+import io.Printer;
+
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.RED;
 
 public class ShowCommand implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
 
-    public ShowCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public ShowCommand(Collection collection, Printer printer) {
+
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
-        collectionManager.show();
+    public boolean execute(Object... args) {
+        collection.show();
+        printer.println(SEPARATOR, RED);
+        return true;
     }
 
     @Override
@@ -27,5 +36,10 @@ public class ShowCommand implements Command {
     @Override
     public String getDescription() {
         return "Выводит все элементы коллекции";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{};
     }
 }

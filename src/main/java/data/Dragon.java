@@ -1,6 +1,6 @@
 package data;
 
-import collection.CollectionManager;
+import collection.Collection;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Dragon implements Comparable<Dragon> {
 
-    private Integer id = CollectionManager.mex();
+    private Integer id = Collection.mex();
     ;//Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -68,6 +68,9 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     public void setId(Integer id) {
+        if (id <= 0) throw new IllegalArgumentException("Значение id должно быть положительным");
+        if (id >= Integer.MAX_VALUE)
+            throw new IllegalArgumentException("Значение id должно быть меньше чем " + Integer.MAX_VALUE);
         this.id = id;
     }
 
@@ -163,25 +166,26 @@ public class Dragon implements Comparable<Dragon> {
 
 
         public Dragon build() throws IllegalArgumentException {
-            if (newDragon.name == null || newDragon.creationDate == null || newDragon.coordinates == null ||
-                    newDragon.id == null || newDragon.age == null
-                    || newDragon.color == null || newDragon.weight == null || newDragon.killer.getName() == null) {
-                throw new IllegalArgumentException("Вы ввели некорректные данные");
-            }
+//            if (newDragon.name == null || newDragon.creationDate == null || newDragon.coordinates == null ||
+//                    newDragon.id == null || newDragon.age == null
+//                    || newDragon.color == null || newDragon.weight == null || newDragon.killer.getName() == null) {
+//                throw new IllegalArgumentException("Вы ввели некорректные данные");
+//            }
             return newDragon;
         }
 
     }
 
-    public boolean isValid() {
+    public Dragon isValid() {
         setName(this.name);
+        setId(this.id);
         setCoordinates(this.coordinates.isValid());
         setAge(this.age);
         setWeight(this.weight);
         setColor(this.color);
         setType(this.type);
         setKiller(this.killer.isValid());
-        return true;
+        return this;
     }
 
 

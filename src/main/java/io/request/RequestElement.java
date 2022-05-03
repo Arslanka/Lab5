@@ -18,11 +18,14 @@ public class RequestElement {
         this.printer = printer;
     }
 
-    public <T> void get(String prefix, Function<String, T> cast, Consumer<T> action) {
+    public <T> void get(String prefix, Function<String, T> cast, Consumer<T> action, boolean toLower) {
         while (true) {
             try {
                 printer.print(prefix, PURPLE);
-                action.accept(cast.apply(sc.nextLine().trim().toLowerCase()));
+                if (toLower)
+                    action.accept(cast.apply(sc.nextLine().trim().toLowerCase()));
+                else
+                    action.accept(cast.apply(sc.nextLine().trim()));
                 return;
             } catch (IllegalStateException | IllegalArgumentException | InputMismatchException e) {
                 printer.println(e.getMessage(), RED);
@@ -30,11 +33,14 @@ public class RequestElement {
         }
     }
 
-    public <T>  T get(String prefix, Function<String, T> action) {
+    public <T> T get(String prefix, Function<String, T> action, boolean toLower) {
         while (true) {
             try {
                 printer.print(prefix, PURPLE);
-                return action.apply(sc.nextLine().trim().toLowerCase());
+                if (toLower)
+                    return action.apply(sc.nextLine().trim().toLowerCase());
+                else return action.apply(sc.nextLine().trim());
+
             } catch (IllegalStateException | IllegalArgumentException | InputMismatchException e) {
                 printer.println(e.getMessage(), RED);
             }

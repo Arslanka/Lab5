@@ -16,13 +16,13 @@ public class TextFile implements Readable, Writeable {
         // TODO: specify file size limit (/dev/random)
         this.file = file;
         if (!file.exists()) {
-            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста введите корректные данные");
+            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста, введите корректные данные");
         }
         if (file.isDirectory()) {
-            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста введите корректные данные");
+            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста, введите корректные данные");
         }
         if (!file.canRead()) {
-            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста введите корректные данные"); //TODO FileReadPermissionException
+            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста, введите корректные данные"); //TODO FileReadPermissionException
         }
     }
 

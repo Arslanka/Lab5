@@ -4,8 +4,11 @@ import io.ConsoleColor;
 import io.Printer;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import static io.Console.SEPARATOR;
 import static io.ConsoleColor.CYAN;
+import static io.ConsoleColor.RED;
 
 public class HelpCommand implements Command {
     private final Printer printer;
@@ -15,16 +18,19 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public void execute(Object... args) {
-        HashMap<String, Command> commandMap = (HashMap<String, Command>) args[0];
+    public boolean execute(Object... args) {
+        Map<String, Command> commandMap = (Map<String, Command>) args[0];
+
         for (String entry : commandMap.keySet()) {
             printer.println((String.format("%-30s", entry) + " "  + commandMap.get(entry).getDescription()), CYAN);
         }
+        printer.println(SEPARATOR, RED);
+        return true;
     }
 
     @Override
     public boolean withArgument() {
-        return true;
+        return false;
     }
 
     @Override
@@ -35,6 +41,11 @@ public class HelpCommand implements Command {
     @Override
     public String getDescription() {
         return "Выводит названия и описания всех команд";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{};
     }
 
 }

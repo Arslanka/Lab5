@@ -1,12 +1,10 @@
 package io.request;
 
-import data.Coordinates;
-import data.Location;
-import data.Person;
+import data.*;
 import io.InputData;
 import io.Printer;
 
-import static io.ConsoleColor.BLUE;
+import static io.ConsoleColor.*;
 
 public class RequestPerson {
     private final RequestElement requestElement;
@@ -25,13 +23,13 @@ public class RequestPerson {
         printer.println("Введите данные для создания объекта " + "Person" + ":", BLUE);
         requestElement.get("   Введите имя: ",
                 inputData::getName,
-                personBuilder::withName);
-        requestElement.get("   Введите день рождения: ",
+                personBuilder::withName, true);
+        requestElement.get("   Введите день рождения в формате yyyy-MM-dd HH:mm:ss a z: ",
                 inputData::getDateTime,
-                personBuilder::withBirthday);
-        requestElement.get("   Введите национальность: ",
+                personBuilder::withBirthday, true);
+        requestElement.get(CYAN.wrapped("   Возможные цвета: " + Country.nameList()) + PURPLE.wrapped("\n   Введите национальность: "),
                 inputData::getNationality,
-                personBuilder::withNationality);
+                personBuilder::withNationality, true);
         personBuilder.withLocation(requestLocation.get().build());
         return personBuilder;
     }

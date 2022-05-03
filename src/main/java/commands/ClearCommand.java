@@ -1,17 +1,27 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
+import io.Printer;
+
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.CYAN;
+import static io.ConsoleColor.RED;
 
 public class ClearCommand implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
 
-    public ClearCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public ClearCommand(Collection collection, Printer printer) {
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
-        collectionManager.clear();
+    public boolean execute(Object... args) {
+        collection.clear();
+        printer.println("Коллекция очищена", CYAN);
+        printer.println(SEPARATOR, RED);
+        return true;
     }
 
     @Override
@@ -27,6 +37,11 @@ public class ClearCommand implements Command {
     @Override
     public String getDescription() {
         return "Очищает коллекцию";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{};
     }
 
 

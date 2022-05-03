@@ -25,16 +25,16 @@ public class RequestLocation {
         printer.println("Введите данные для создания объекта Location: ", BLUE);
         requestElement.get("   Введите координату X: ",
                 inputData::getIntCoordinate,
-                locationBuilder::withX);
+                locationBuilder::withX, true);
         requestElement.get("   Введите координату Y: ",
                 inputData::getIntCoordinate,
-                locationBuilder::withY);
+                locationBuilder::withY, true);
         requestElement.get("   Введите координату Z: ",
                 inputData::getIntCoordinate,
-                locationBuilder::withZ);
+                locationBuilder::withZ, true);
         requestElement.get("   Введите имя: ",
                 inputData::getName,
-                locationBuilder::withName);
+                locationBuilder::withName, true);
         return locationBuilder;
     }
 }

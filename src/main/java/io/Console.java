@@ -1,9 +1,10 @@
 package io;
 
-import collection.CollectionManager;
+import collection.Collection;
 import com.google.gson.JsonParseException;
 import commands.*;
 import exceptions.FileReadPermissionException;
+import file.FileManager;
 import file.JsonFile;
 import file.TextFile;
 import io.request.RequestDragon;
@@ -22,15 +23,17 @@ import java.util.function.Supplier;
 import static io.ConsoleColor.*;
 
 public class Console {
+    public static final String SEPARATOR = "-----------------------";
+
     private final Scanner sc;
     private final Map<String, Command> commandsByName = new HashMap<>();
     private final Map<String, Supplier<Object[]>> supplierMap = new HashMap<>();
-    private final CollectionManager collectionManager;
+    private final Collection collection;
     private final Printer printer;
 
-    public Console(Scanner sc, CollectionManager collectionManager, Printer printer) {
+    public Console(Scanner sc, Collection collection, Printer printer) {
         this.sc = sc;
-        this.collectionManager = collectionManager;
+        this.collection = collection;
         this.printer = printer;
         fillCommands();
     }
@@ -43,19 +46,19 @@ public class Console {
             final TextFile textFile = new TextFile(file);
             final JsonFile jsonFile = new JsonFile(textFile);
             try {
-                collectionManager.add(jsonFile.read());
+                collection.add(jsonFile.read());
             } catch (NoSuchElementException e) {
                 printer.println(e.getMessage(), RED);
                 return;
             }
-            ExCommand exCommand = new ExCommand(this.commandsByName, supplierMap, sc, this.printer);
-            boolean needExit = false;
-            while (!needExit) {
+            CommandInterpreter exCommand = new CommandInterpreter(this.commandsByName, supplierMap, this.printer);
+            boolean running = true;
+            while (running) {
                 printer.println(("Введите команду:"), GREEN);
                 try {
-                    needExit = exCommand.run(sc.nextLine().trim().toLowerCase());
+                    running = exCommand.run(sc.nextLine().trim().toLowerCase());
                 } catch (NoSuchElementException e) {
-                    throw new NoSuchElementException("Вы ничего не ввели. Пожалуйста введите данные.");
+                    running = false;
                 }
             }
             printer.println("Исполнение программы остановлено", YELLOW);
@@ -73,57 +76,54 @@ public class Console {
         commandsByName.put("help", new HelpCommand(new Printer()));
         supplierMap.put("help",
                 () -> new Object[]{commandsByName});
+        commandsByName.put("exit", new ExitCommand(new Printer()));
+        supplierMap.put("exit",
+                () -> new Object[]{});
         commandsByName.put("info",
-                new InfoCommand(collectionManager));
+                new InfoCommand(collection, printer));
         supplierMap.put("info",
                 () -> new Object[]{});
-        commandsByName.put("show", new ShowCommand(collectionManager));
+        commandsByName.put("show", new ShowCommand(collection, printer));
         supplierMap.put("show",
                 () -> new Object[]{});
-        commandsByName.put("add", new AddCommand(collectionManager));
+        commandsByName.put("add", new AddCommand(collection, printer));
         supplierMap.put("add",
                 () -> new Object[]{new RequestDragon(requestElement, printer, inputData).get().build()});
-        commandsByName.put("update", new UpdateIdCommand(collectionManager));
+        commandsByName.put("update", new UpdateIdCommand(collection, printer));
         supplierMap.put("update",
-                () -> new Object[]{requestElement.get("Введите id:", inputData::getId),
-                        new RequestDragon(requestElement, printer, inputData).get().build()});
-        commandsByName.put("remove_by_id", new RemoveByIdCommand(collectionManager));
+                () -> new Object[]{requestElement.get("Введите id:", inputData::getId, true),
+                        new RequestDragon(requestElement, printer, inputData)});
+        commandsByName.put("remove_by_id", new RemoveByIdCommand(collection, printer));
         supplierMap.put("remove_by_id",
-                () -> new Object[]{requestElement.get("Введите id:", inputData::getId)});
-        commandsByName.put("clear", new ClearCommand(collectionManager));
+                () -> new Object[]{requestElement.get("Введите id:", inputData::getId, true)});
+        commandsByName.put("clear", new ClearCommand(collection, printer));
         supplierMap.put("clear",
                 () -> new Object[]{});
-        commandsByName.put("save", new SaveCommand(collectionManager));
+        commandsByName.put("save", new SaveCommand(collection, printer));
+
         supplierMap.put("save",
-                () -> {
-                    try {
-                        System.out.print(BLUE.wrapped("Введите название файла:")); //todo fix
-                        return new Object[]{new JsonFile(new TextFile(new File(sc.nextLine().trim())))};
-                    } catch (FileNotFoundException e) {
-                        printer.println(e.getMessage(), RED);
-                    }
-                    throw new IllegalArgumentException("Вы ввели некорректные данные");//TODO FIX
-                });
-        commandsByName.put("execute_script", new ExecuteScriptCommand());
-        //supplierMap.put("execute_script", () -> new Object[]{jsonString.getDragon().build()});
-        commandsByName.put("add_if_max", new AddIfMaxCommand(collectionManager));
+                () -> new Object[]{new FileManager(requestElement.get("Введите название файла:", inputData::getFileName, false), printer).getJsonFileByName()});
+        commandsByName.put("execute_script", new ExecuteScriptCommand(printer));
+        supplierMap.put("execute_script",
+                () -> new Object[]{new Script(new FileManager(requestElement.get("Введите название файла со скриптом:", inputData::getFileName, false), printer).getTextFileByName(), commandsByName, supplierMap, printer)});
+        commandsByName.put("add_if_max", new AddIfMaxCommand(collection, printer));
         supplierMap.put("add_if_max",
                 () -> new Object[]{new RequestDragon(requestElement, printer, inputData).get().build()});
-        commandsByName.put("remove_greater", new RemoveGreaterCommand(collectionManager));
-        supplierMap.put("add",
+        commandsByName.put("remove_greater", new RemoveGreaterCommand(collection, printer));
+        supplierMap.put("remove_greater",
                 () -> new Object[]{new RequestDragon(requestElement, printer, inputData).get().build()});
-        commandsByName.put("remove_lower", new RemoveLowerCommand(collectionManager));
+        commandsByName.put("remove_lower", new RemoveLowerCommand(collection, printer));
         supplierMap.put("remove_lower",
                 () -> new Object[]{new RequestDragon(requestElement, printer, inputData).get().build()});
-        commandsByName.put("remove_all_by_weight", new RemoveAllByWeight(collectionManager));
+        commandsByName.put("remove_all_by_weight", new RemoveAllByWeight(collection, printer));
         supplierMap.put("remove_all_by_weight",
-                () -> new Object[]{requestElement.get("Введите вес:", inputData::getWeight)});
-        commandsByName.put("count_greater_than_killer", new CountGreaterThanKillerCommand(collectionManager));
+                () -> new Object[]{requestElement.get("Введите вес:", inputData::getWeight, true)});
+        commandsByName.put("count_greater_than_killer", new CountGreaterThanKillerCommand(collection, printer));
         supplierMap.put("count_greater_than_killer",
                 () -> new Object[]{new RequestPerson(requestElement, printer, inputData).get().build()});
-        commandsByName.put("filter_greater_than_age", new FilterGreaterThanAgeCommand(collectionManager));
+        commandsByName.put("filter_greater_than_age", new FilterGreaterThanAgeCommand(collection, printer));
         supplierMap.put("filter_greater_than_age",
-                () -> new Object[]{requestElement.get("Введите возраст:", inputData::getAge)});
+                () -> new Object[]{requestElement.get("Введите возраст:", inputData::getAge, true)});
     }
 
 }

@@ -6,8 +6,7 @@ import io.InputData;
 import io.Printer;
 import data.*;
 
-import static io.ConsoleColor.BLUE;
-import static io.ConsoleColor.CYAN;
+import static io.ConsoleColor.*;
 
 public class RequestDragon {
     private final RequestElement requestElement;
@@ -27,22 +26,20 @@ public class RequestDragon {
         printer.println("Введите данные для создания объекта Dragon: ", BLUE);
         requestElement.get("   Введите имя: ",
                 inputData::getName,
-                dragonBuilder::withName);
+                dragonBuilder::withName, true);
         dragonBuilder.withCoordinates(requestCoordinates.get().build());
         requestElement.get("   Введите возраст: ",
                 inputData::getAge,
-                dragonBuilder::withAge);
+                dragonBuilder::withAge, true);
         requestElement.get("   Введите вес: ",
                 inputData::getWeight,
-                dragonBuilder::withWeight);
-        printer.println("   Возможные цвета: " + Color.nameList(), CYAN);
-        requestElement.get("   Введите цвет: ",
+                dragonBuilder::withWeight, true);
+        requestElement.get(CYAN.wrapped("   Возможные цвета: " + Color.nameList()) + PURPLE.wrapped("\n   Введите цвет: "),
                 inputData::getColor,
-                dragonBuilder::withColor);
-        printer.println("   Возможные типы: " + DragonType.nameList(), CYAN);
-        requestElement.get("   Введите тип: ",
+                dragonBuilder::withColor, true);
+        requestElement.get(CYAN.wrapped("   Возможные цвета: " + DragonType.nameList()) + PURPLE.wrapped("\n   Введите тип: "),
                 inputData::getType,
-                dragonBuilder::withType);
+                dragonBuilder::withType, true);
         dragonBuilder.withPerson(requestPerson.get().build());
         return dragonBuilder;
     }

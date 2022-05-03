@@ -1,26 +1,36 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
+import io.Printer;
 
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.CYAN;
 import static io.ConsoleColor.RED;
 
 public class RemoveAllByWeight implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
 
-    public RemoveAllByWeight(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public RemoveAllByWeight(Collection collection, Printer printer) {
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
+    public boolean execute(Object... args) {
         try {
-            collectionManager.removeByWeight(args[0]);
+            Float weight = (Float) args[0];
+            collection.removeByWeight(weight);
+            printer.println("Элементы, значение поля weight которых эквивалентно заданному, успешно удалены из коллекции", CYAN);
+            printer.println(SEPARATOR, RED);
+
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(RED.wrapped("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз"));
+            throw  new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
+                    " Пожалуйста, попробуйте еще раз");
         } catch (IllegalArgumentException e) {
-            System.out.println(RED.wrapped(e.getMessage()));
+           throw  new IllegalArgumentException(e.getMessage());
         }
+        return true;
     }
 
     @Override
@@ -36,5 +46,10 @@ public class RemoveAllByWeight implements Command {
     @Override
     public String getDescription() {
         return "Удаляет из коллекции все элементы, значение поля weight которых эквивалентно заданному";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{Float.class};
     }
 }

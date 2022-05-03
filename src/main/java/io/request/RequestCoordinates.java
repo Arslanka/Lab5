@@ -22,10 +22,10 @@ public class RequestCoordinates {
         printer.println("Введите данные для создания объекта Coordinates: ", BLUE);
         requestElement.get("   Введите координату X: ",
                 inputData::getIntCoordinate,
-                coordinatesBuilder::withX);
+                coordinatesBuilder::withX, true);
         requestElement.get("   Введите координату Y: ",
                 inputData::getDoubleCoordinate,
-                coordinatesBuilder::withY);
+                coordinatesBuilder::withY, true);
         return coordinatesBuilder;
     }
 }

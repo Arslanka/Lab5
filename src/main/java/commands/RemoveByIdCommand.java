@@ -1,26 +1,35 @@
 package commands;
 
-import collection.CollectionManager;
+import collection.Collection;
+import io.Printer;
 
+import static io.Console.SEPARATOR;
+import static io.ConsoleColor.CYAN;
 import static io.ConsoleColor.RED;
 
 public class RemoveByIdCommand implements Command {
-    private final CollectionManager collectionManager;
+    private final Collection collection;
+    private final Printer printer;
 
-    public RemoveByIdCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public RemoveByIdCommand(Collection collection, Printer printer) {
+
+        this.collection = collection;
+        this.printer = printer;
     }
 
     @Override
-    public void execute(Object... args) {
+    public boolean execute(Object... args) {
         try {
-            collectionManager.removeById((Integer) args[0]);
+            collection.removeById((Integer) args[0]);
+            printer.println("Элемент, значение поля id которого эквивалентно заданному, успешно удален из коллекции", CYAN);
+            printer.println(SEPARATOR, RED);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(RED.wrapped("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз"));
+            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
+                    " Пожалуйста, попробуйте еще раз");
         } catch (IllegalArgumentException e) {
-            System.out.println(RED.wrapped(e.getMessage()));
+            throw  new IllegalArgumentException(e.getMessage());
         }
+        return true;
     }
 
     @Override
@@ -36,5 +45,10 @@ public class RemoveByIdCommand implements Command {
     @Override
     public String getDescription() {
         return "Удаляет элемент из коллекции по его id";
+    }
+
+    @Override
+    public Class<?>[] getArgumentsClasses() {
+        return new Class[]{Integer.class};
     }
 }
