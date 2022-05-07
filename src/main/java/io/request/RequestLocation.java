@@ -1,13 +1,10 @@
 package io.request;
 
 import data.Location;
-import data.Person;
 import io.InputData;
 import io.Printer;
 
-import java.time.LocalDateTime;
-
-import static io.ConsoleColor.BLUE;
+import static io.ConsoleColor.OBJECT;
 
 public class RequestLocation {
     private final RequestElement requestElement;
@@ -22,7 +19,7 @@ public class RequestLocation {
 
     public Location.Builder get() {
         Location.Builder locationBuilder = new Location.Builder();
-        printer.println("Введите данные для создания объекта Location: ", BLUE);
+        printer.println("Введите данные для создания объекта Location: ", OBJECT);
         requestElement.get("   Введите координату X: ",
                 inputData::getIntCoordinate,
                 locationBuilder::withX, true);

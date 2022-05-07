@@ -4,7 +4,7 @@ import collection.Collection;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class FilterGreaterThanAgeCommand implements Command {
     private final Collection collection;
@@ -20,7 +20,7 @@ public class FilterGreaterThanAgeCommand implements Command {
         try {
             Long age = (Long) args[0];
             collection.filterGreaterThanAge(age);
-            printer.println(SEPARATOR, RED);
+            printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
                     " Пожалуйста, попробуйте еще раз");

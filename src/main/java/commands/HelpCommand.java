@@ -1,14 +1,12 @@
 package commands;
 
-import io.ConsoleColor;
 import io.Printer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.CYAN;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.HELP;
+import static io.ConsoleColor.ERROR;
 
 public class HelpCommand implements Command {
     private final Printer printer;
@@ -22,9 +20,9 @@ public class HelpCommand implements Command {
         Map<String, Command> commandMap = (Map<String, Command>) args[0];
 
         for (String entry : commandMap.keySet()) {
-            printer.println((String.format("%-30s", entry) + " "  + commandMap.get(entry).getDescription()), CYAN);
+            printer.println((String.format("%-30s", entry) + " "  + commandMap.get(entry).getDescription()), HELP);
         }
-        printer.println(SEPARATOR, RED);
+        printer.println(SEPARATOR, ERROR);
         return true;
     }
 

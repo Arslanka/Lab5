@@ -4,7 +4,7 @@ import data.Coordinates;
 import io.InputData;
 import io.Printer;
 
-import static io.ConsoleColor.BLUE;
+import static io.ConsoleColor.OBJECT;
 
 public class RequestCoordinates {
     private final RequestElement requestElement;
@@ -19,7 +19,7 @@ public class RequestCoordinates {
 
     public Coordinates.Builder get() {
         Coordinates.Builder coordinatesBuilder = new Coordinates.Builder();
-        printer.println("Введите данные для создания объекта Coordinates: ", BLUE);
+        printer.println("Введите данные для создания объекта Coordinates: ", OBJECT);
         requestElement.get("   Введите координату X: ",
                 inputData::getIntCoordinate,
                 coordinatesBuilder::withX, true);

@@ -1,17 +1,14 @@
-package io;
+package execute;
 
 import commands.*;
+import io.Printer;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.Supplier;
 
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
-public class CommandInterpreter { //TODO implements runnable
+public class CommandInterpreter {
     private final Map<String, Command> commandMap;
     private final Printer printer;
     private final Map<String, Supplier<Object[]>> supplierMap;
@@ -26,17 +23,16 @@ public class CommandInterpreter { //TODO implements runnable
     public boolean run(String commandAsString, Object... scriptArgs) {
         try {
             if (!commandMap.containsKey(commandAsString)) {
-                printer.println(("Команды с названием " + commandAsString + " не существует"), RED);
+                printer.println(("Команды с названием " + commandAsString + " не существует"), ERROR);
                 return true;
             }
             Command command = commandMap.get(commandAsString);
             if (scriptArgs.length == 0) {
-                return command.execute(new CommandArgument(commandAsString, supplierMap).get()); //todo mb transmit in console
+                return command.execute(new CommandArgument(commandAsString, supplierMap).get());
             } else
                 return command.execute(scriptArgs);
-        } catch (IllegalArgumentException e) {
-            printer.println(e.getMessage(), RED);
-//            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            printer.println(e.getMessage(), ERROR);
         }
         return true;
     }

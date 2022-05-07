@@ -165,26 +165,22 @@ public class Dragon implements Comparable<Dragon> {
         }
 
 
-        public Dragon build() throws IllegalArgumentException {
-//            if (newDragon.name == null || newDragon.creationDate == null || newDragon.coordinates == null ||
-//                    newDragon.id == null || newDragon.age == null
-//                    || newDragon.color == null || newDragon.weight == null || newDragon.killer.getName() == null) {
-//                throw new IllegalArgumentException("Вы ввели некорректные данные");
-//            }
+        public Dragon build() {
             return newDragon;
         }
 
     }
 
-    public Dragon isValid() {
+    public Dragon validated() {
         setName(this.name);
         setId(this.id);
-        setCoordinates(this.coordinates.isValid());
+        setCreationDate();
+        setCoordinates(this.coordinates.validated());
         setAge(this.age);
         setWeight(this.weight);
         setColor(this.color);
         setType(this.type);
-        setKiller(this.killer.isValid());
+        setKiller(this.killer.validated());
         return this;
     }
 
@@ -203,7 +199,7 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     @Override
-    public String toString() { //TODO DO PERFECT
+    public String toString() {
         return "Dragon{" +
                 "id=" + id +
                 ", name='" + name + '\'' +

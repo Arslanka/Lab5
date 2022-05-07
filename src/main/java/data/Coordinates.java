@@ -3,7 +3,7 @@ package data;
 import java.util.Objects;
 
 public class Coordinates {
-    private Integer x;
+    private Integer x; //Поле не может быть null
     private Double y; //Максимальное значение поля: 508, Поле не может быть null
 
     private Coordinates() {
@@ -51,15 +51,12 @@ public class Coordinates {
             return this;
         }
 
-        public Coordinates build() throws IllegalArgumentException {
-            if (newCoordinates.y == null || newCoordinates.x == null) {
-                throw new IllegalArgumentException();
-            }
+        public Coordinates build() {
             return newCoordinates;
         }
     }
 
-    public Coordinates isValid() {
+    public Coordinates validated() {
         setX(this.x);
         setY(this.y);
         return this;

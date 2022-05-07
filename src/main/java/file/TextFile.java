@@ -13,17 +13,7 @@ public class TextFile implements Readable, Writeable {
     private static final int MAX_FILE_LENGTH = 10000;
 
     public TextFile(File file) throws FileNotFoundException, FileReadPermissionException {
-        // TODO: specify file size limit (/dev/random)
-        this.file = file;
-        if (!file.exists()) {
-            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста, введите корректные данные");
-        }
-        if (file.isDirectory()) {
-            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста, введите корректные данные");
-        }
-        if (!file.canRead()) {
-            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста, введите корректные данные"); //TODO FileReadPermissionException
-        }
+        this.file = validated(file);
     }
 
     @Override
@@ -53,10 +43,28 @@ public class TextFile implements Readable, Writeable {
                 new FileOutputStream(this.file), StandardCharsets.UTF_8);
         streamWriter.write(string);
         streamWriter.close();
+
     }
 
     @Override
     public String toString() {
         return file.toString();
+    }
+
+    public File getFile() {
+        return this.file;
+    }
+
+    public File validated(File file) throws FileNotFoundException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста, введите корректные данные");
+        }
+        if (file.isDirectory()) {
+            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста, введите корректные данные");
+        }
+        if (!file.canRead()) {
+            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста, введите корректные данные"); //TODO FileReadPermissionException
+        }
+        return file;
     }
 }

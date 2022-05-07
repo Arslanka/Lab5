@@ -5,8 +5,8 @@ import data.Dragon;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.CYAN;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.HELP;
+import static io.ConsoleColor.ERROR;
 
 public class AddIfMaxCommand implements Command {
     private final Collection collection;
@@ -23,8 +23,8 @@ public class AddIfMaxCommand implements Command {
         try {
             Dragon dragon = (Dragon) args[0];
             collection.addIfMax(dragon);
-            printer.println("Элемент успешно добавлен в коллекцию", CYAN);
-            printer.println(SEPARATOR, RED);
+            printer.println("Элемент успешно добавлен в коллекцию", HELP);
+            printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
                     " Пожалуйста, попробуйте еще раз");

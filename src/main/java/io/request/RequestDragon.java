@@ -1,6 +1,5 @@
 package io.request;
 
-import data.Coordinates;
 import data.Dragon;
 import io.InputData;
 import io.Printer;
@@ -23,7 +22,7 @@ public class RequestDragon {
         Dragon.Builder dragonBuilder = new Dragon.Builder();
         RequestPerson requestPerson = new RequestPerson(requestElement, printer, inputData);
         RequestCoordinates requestCoordinates = new RequestCoordinates(requestElement, printer, inputData);
-        printer.println("Введите данные для создания объекта Dragon: ", BLUE);
+        printer.println("Введите данные для создания объекта Dragon: ", OBJECT);
         requestElement.get("   Введите имя: ",
                 inputData::getName,
                 dragonBuilder::withName, true);
@@ -34,10 +33,10 @@ public class RequestDragon {
         requestElement.get("   Введите вес: ",
                 inputData::getWeight,
                 dragonBuilder::withWeight, true);
-        requestElement.get(CYAN.wrapped("   Возможные цвета: " + Color.nameList()) + PURPLE.wrapped("\n   Введите цвет: "),
+        requestElement.get(HELP.wrapped("   Возможные цвета: " + Color.nameList()) + FIELD.wrapped("\n   Введите цвет: "),
                 inputData::getColor,
                 dragonBuilder::withColor, true);
-        requestElement.get(CYAN.wrapped("   Возможные цвета: " + DragonType.nameList()) + PURPLE.wrapped("\n   Введите тип: "),
+        requestElement.get(HELP.wrapped("   Возможные цвета: " + DragonType.nameList()) + FIELD.wrapped("\n   Введите тип: "),
                 inputData::getType,
                 dragonBuilder::withType, true);
         dragonBuilder.withPerson(requestPerson.get().build());

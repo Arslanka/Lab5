@@ -24,7 +24,7 @@ public class JsonString {
                                     -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
             t = gson.fromJson(string, cls);
         } catch (JsonParseException | DateTimeParseException e) {
-            throw new JsonParseException("Ошибка парсинга. Данные некорректны.");
+            throw new JsonParseException("Ошибка парсинга Json. Данные некорректны. " + e.getMessage());
         }
         return t;
     }
@@ -39,7 +39,7 @@ public class JsonString {
 
             dragons = gson.fromJson(string, Dragon[].class);
         } catch (JsonParseException | DateTimeParseException e) {
-            throw new JsonParseException("Ошибка парсинга. Данные некорректны.");
+            throw new JsonParseException("Ошибка парсинга Json. Данные некорректны. " + e.getLocalizedMessage());
         }
         return new ArrayList<>(Arrays.asList(dragons));
     }

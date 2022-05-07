@@ -4,7 +4,7 @@ import collection.Collection;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class InfoCommand implements Command {
     private final Collection collection;
@@ -18,7 +18,7 @@ public class InfoCommand implements Command {
     @Override
     public boolean execute(Object... args) {
         collection.info();
-        printer.println(SEPARATOR, RED);
+        printer.println(SEPARATOR, ERROR);
         return true;
     }
 

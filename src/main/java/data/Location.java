@@ -51,7 +51,7 @@ public class Location {
         }
 
         if (name.length() > 346) {
-            throw new IllegalArgumentException("Длина имение не может быть больше 346");
+            throw new IllegalArgumentException("Длина имени не может быть больше 346");
         }
         this.name = name;
     }
@@ -87,15 +87,12 @@ public class Location {
             return this;
         }
 
-        public Location build() throws IllegalArgumentException {
-//            if (newLocation.name == null || newLocation.y == null || newLocation.x == null || newLocation.z == null) {
-//                throw new IllegalArgumentException("Вы некорректно заполнили класс. Пожалуйста, попробуйте еще раз");
-//            }
+        public Location build()  {
             return newLocation;
         }
     }
 
-    public Location isValid() {
+    public Location validated() {
         setX(this.x);
         setY(this.y);
         setZ(this.z);

@@ -20,14 +20,14 @@ public class RequestPerson {
     public Person.Builder get() {
         Person.Builder personBuilder = new Person.Builder();
         RequestLocation requestLocation = new RequestLocation(requestElement, printer, inputData);
-        printer.println("Введите данные для создания объекта " + "Person" + ":", BLUE);
+        printer.println("Введите данные для создания объекта " + "Person" + ":", OBJECT);
         requestElement.get("   Введите имя: ",
                 inputData::getName,
                 personBuilder::withName, true);
         requestElement.get("   Введите день рождения в формате yyyy-MM-dd HH:mm:ss a z: ",
                 inputData::getDateTime,
                 personBuilder::withBirthday, true);
-        requestElement.get(CYAN.wrapped("   Возможные цвета: " + Country.nameList()) + PURPLE.wrapped("\n   Введите национальность: "),
+        requestElement.get(HELP.wrapped("   Возможные цвета: " + Country.nameList()) + FIELD.wrapped("\n   Введите национальность: "),
                 inputData::getNationality,
                 personBuilder::withNationality, true);
         personBuilder.withLocation(requestLocation.get().build());

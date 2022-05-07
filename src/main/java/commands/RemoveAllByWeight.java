@@ -4,8 +4,8 @@ import collection.Collection;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.CYAN;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.HELP;
+import static io.ConsoleColor.ERROR;
 
 public class RemoveAllByWeight implements Command {
     private final Collection collection;
@@ -21,8 +21,8 @@ public class RemoveAllByWeight implements Command {
         try {
             Float weight = (Float) args[0];
             collection.removeByWeight(weight);
-            printer.println("Элементы, значение поля weight которых эквивалентно заданному, успешно удалены из коллекции", CYAN);
-            printer.println(SEPARATOR, RED);
+            printer.println("Элементы, значение поля weight которых эквивалентно заданному, успешно удалены из коллекции", HELP);
+            printer.println(SEPARATOR, ERROR);
 
         } catch (ArrayIndexOutOfBoundsException e) {
             throw  new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +

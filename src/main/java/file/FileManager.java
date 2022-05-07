@@ -1,15 +1,12 @@
 package file;
 
 import exceptions.FileReadPermissionException;
-import io.Console;
-import io.ConsoleColor;
 import io.Printer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import static io.ConsoleColor.BLUE;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class FileManager {
     private final String fileName;
@@ -24,16 +21,18 @@ public class FileManager {
         try {
             return new TextFile(new File(this.fileName));
         } catch (FileNotFoundException | FileReadPermissionException e) {
-            printer.println(e.getMessage(), RED);
+            printer.println(e.getMessage(), ERROR);
+        } catch (NullPointerException e) {
+            printer.println("Вы не ввели название файла", ERROR);
         }
-        return null;
+        return null; //todo fix null
     }
 
     public JsonFile getJsonFileByName() {
         try {
             return new JsonFile(this.getTextFileByName());
-        } catch (FileReadPermissionException e) {
-            printer.println(e.getMessage(), RED);
+        } catch (FileReadPermissionException | NullPointerException e) {
+            printer.println(e.getMessage(), ERROR);
         }
         return null;
     }

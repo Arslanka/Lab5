@@ -4,7 +4,7 @@ import collection.Collection;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class ShowCommand implements Command {
     private final Collection collection;
@@ -19,7 +19,7 @@ public class ShowCommand implements Command {
     @Override
     public boolean execute(Object... args) {
         collection.show();
-        printer.println(SEPARATOR, RED);
+        printer.println(SEPARATOR, ERROR);
         return true;
     }
 

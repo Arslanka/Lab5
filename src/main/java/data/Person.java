@@ -89,18 +89,15 @@ public class Person implements Comparable<Person> {
         }
 
         public Person build() throws IllegalArgumentException {
-//            if (newPerson.name == null || newPerson.birthday == null || newPerson.nationality == null || newPerson.location == null) {
-//                throw new IllegalArgumentException();
-//            }
             return newPerson;
         }
     }
 
-    public Person isValid() {
+    public Person validated() {
         setName(this.name);
         setBirthday(this.birthday);
         setNationality(this.nationality);
-        setLocation(this.location.isValid());
+        setLocation(this.location.validated());
         return this;
     }
 

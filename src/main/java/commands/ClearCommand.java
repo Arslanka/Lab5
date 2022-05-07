@@ -4,8 +4,8 @@ import collection.Collection;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.CYAN;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.HELP;
+import static io.ConsoleColor.ERROR;
 
 public class ClearCommand implements Command {
     private final Collection collection;
@@ -19,8 +19,8 @@ public class ClearCommand implements Command {
     @Override
     public boolean execute(Object... args) {
         collection.clear();
-        printer.println("Коллекция очищена", CYAN);
-        printer.println(SEPARATOR, RED);
+        printer.println("Коллекция очищена", HELP);
+        printer.println(SEPARATOR, ERROR);
         return true;
     }
 

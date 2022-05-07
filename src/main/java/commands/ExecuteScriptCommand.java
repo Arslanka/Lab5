@@ -1,17 +1,11 @@
 package commands;
 
-import file.JsonFile;
-import file.TextFile;
+import execute.AdvancedScript;
+import execute.Script;
 import io.Printer;
-import io.Script;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
-
-import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
 
 public class ExecuteScriptCommand implements Command {
     private final Printer printer;
@@ -24,14 +18,12 @@ public class ExecuteScriptCommand implements Command {
     public boolean execute(Object... args) {
         try {
             Script script = (Script) args[0];
-            script.execute();
-            printer.println(SEPARATOR, RED);
+            return script.execute();
         } catch (IOException | ClassCastException e) {
             throw new IllegalArgumentException(e.getMessage());
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Вы ввели неверный аргумент для команды");
         }
-        return true;
     }
 
     @Override
@@ -51,6 +43,6 @@ public class ExecuteScriptCommand implements Command {
 
     @Override
     public Class<?>[] getArgumentsClasses() {
-        return new Class[]{JsonFile.class};
+        return new Class[]{File.class};
     }
 }

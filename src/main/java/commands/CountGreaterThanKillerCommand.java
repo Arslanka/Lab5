@@ -5,7 +5,7 @@ import data.Person;
 import io.Printer;
 
 import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class CountGreaterThanKillerCommand implements Command {
     private final Collection collection;
@@ -21,7 +21,7 @@ public class CountGreaterThanKillerCommand implements Command {
         try {
             Person person = (Person) args[0];
             collection.countGreaterThanKiller(person);
-            printer.println(SEPARATOR, RED);
+            printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
                     " Пожалуйста, попробуйте еще раз");

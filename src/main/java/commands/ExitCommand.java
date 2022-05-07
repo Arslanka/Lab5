@@ -1,10 +1,8 @@
 package commands;
 
-import collection.Collection;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
-import static io.ConsoleColor.RED;
+import static io.ConsoleColor.ERROR;
 
 public class ExitCommand implements Command {
     private final Printer printer;
@@ -13,9 +11,10 @@ public class ExitCommand implements Command {
         this.printer = printer;
     }
 
+
     @Override
     public boolean execute(Object... args) {
-        printer.println("Программа завершена", RED);
+        printer.println("Программа завершена", ERROR);
         return false;
     }
 
