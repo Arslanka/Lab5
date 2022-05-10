@@ -38,7 +38,7 @@ public class HelpCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Выводит названия и описания всех команд";
+        return "Displays the names and descriptions of all commands";
     }
 
     @Override

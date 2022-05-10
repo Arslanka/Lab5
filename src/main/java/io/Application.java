@@ -26,15 +26,16 @@ import static io.ConsoleColor.*;
 public class Application {
     public static final String SEPARATOR = "-----------------------";
 
-    private final Scanner sc;
+    private final Scanner sc = new Scanner(System.in);
     private final Map<String, Command> commandsByName = new HashMap<>();
     private final Map<String, Supplier<Object[]>> supplierMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<Scanner, Printer, Object>> requestMap = new HashMap<>();
     private final Collection collection;
+    private final String[] fileName;
     private final Printer printer;
 
-    public Application(Scanner sc, Collection collection, Printer printer) {
-        this.sc = sc;
+    public Application(String[] fileName, Collection collection, Printer printer) {
+        this.fileName = fileName;
         this.collection = collection;
         this.printer = printer;
         fillCommands();
@@ -42,8 +43,7 @@ public class Application {
 
     public void startInteractiveMode() {
         try {
-            printer.println("Enter the name of the file that the collection will be filled with data from", CONSOLE);
-            String fileName = sc.nextLine();
+            String fileName = this.fileName[0];
             final File file = new File(fileName.trim());
             final TextFile textFile = new TextFile(file);
             final JsonFile jsonFile = new JsonFile(textFile);
@@ -63,9 +63,10 @@ public class Application {
             printer.println("Program execution stopped", CONSOLE);
         } catch (NoSuchElementException e) {
             printer.println("The program ended incorrectly. Please restart the program.", ERROR);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printer.println("You didn't specify the file name to populate the collection", ERROR);
         } catch (Exception e) {
             printer.println(e.getMessage(), ERROR);
-            startInteractiveMode();
         }
     }
 
