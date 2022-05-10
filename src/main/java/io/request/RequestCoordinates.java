@@ -26,10 +26,10 @@ public class RequestCoordinates {
     public Coordinates.Builder get() {
         Coordinates.Builder coordinatesBuilder = new Coordinates.Builder();
         printer.println("Enter the data to create the Coordinate object: ", OBJECT);
-        requestElement.get("   Enter the X coordinate: ", sc, printer,
+        requestElement.get("    Enter the X coordinate: ", sc, printer,
                 inputData::getIntCoordinate,
                 coordinatesBuilder::withX, true);
-        requestElement.get("   Enter the Y coordinate: ", sc, printer,
+        requestElement.get("    Enter the Y coordinate: ", sc, printer,
                 inputData::getDoubleCoordinate,
                 coordinatesBuilder::withY, true);
         return coordinatesBuilder;

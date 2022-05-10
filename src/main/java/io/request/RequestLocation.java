@@ -26,19 +26,19 @@ public class RequestLocation {
     public Location.Builder get() {
         Location.Builder locationBuilder = new Location.Builder();
         printer.println("Enter the data to create the object Location: ", OBJECT);
-        requestElement.get("   Enter the X coordinate: ",
+        requestElement.get("    Enter the X coordinate: ",
                 sc, printer,
                 inputData::getIntCoordinate,
                 locationBuilder::withX, true);
-        requestElement.get("   Enter the Y coordinate: ",
+        requestElement.get("    Enter the Y coordinate: ",
                 sc, printer,
                 inputData::getIntCoordinate,
                 locationBuilder::withY, true);
-        requestElement.get("   Enter the Z coordinate: ",
+        requestElement.get("    Enter the Z coordinate: ",
                 sc, printer,
                 inputData::getIntCoordinate,
                 locationBuilder::withZ, true);
-        requestElement.get("   Enter a name: ",
+        requestElement.get("    Enter a name: ",
                 sc, printer,
                 inputData::getName,
                 locationBuilder::withName, true);

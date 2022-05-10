@@ -124,7 +124,7 @@ public class Application {
                 () -> new Object[]{requestElement.get("Enter the weight:", sc, printer, inputData::getWeight, true)});
         commandsByName.put("count_greater_than_killer", new CountGreaterThanKillerCommand(collection, printer));
         supplierMap.put("count_greater_than_killer",
-                () -> new Object[]{new RequestPerson(requestElement, sc, printer, inputData).get()});
+                () -> new Object[]{new RequestPerson(requestElement, sc, printer, inputData).get().build()});
         commandsByName.put("filter_greater_than_age", new FilterGreaterThanAgeCommand(collection, printer));
         supplierMap.put("filter_greater_than_age",
                 () -> new Object[]{requestElement.get("Enter the age:", sc, printer, inputData::getAge, true)});

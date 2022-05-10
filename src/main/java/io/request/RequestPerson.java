@@ -30,11 +30,11 @@ public class RequestPerson {
                 sc, printer,
                 inputData::getName,
                 personBuilder::withName, true);
-        requestElement.get("  Enter your birthday in the format yyyy-MM-dd HH:mm:ss a z: ",
+        requestElement.get("    Enter your birthday in the format yyyy-MM-dd HH:mm:ss a z: ",
                 sc, printer,
                 inputData::getDateTime,
                 personBuilder::withBirthday, true);
-        requestElement.get(HELP.wrapped("  Possible colors: " + Country.nameList()) + FIELD.wrapped("\n   Enter your nationality: "),
+        requestElement.get(HELP.wrapped("   Possible colors: " + Country.nameList()) + FIELD.wrapped("\n   Enter your nationality: "),
                 sc, printer,
                 inputData::getNationality,
                 personBuilder::withNationality, true);
