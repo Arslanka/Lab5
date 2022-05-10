@@ -23,15 +23,15 @@ public class FileManager {
         } catch (FileNotFoundException | FileReadPermissionException e) {
             printer.println(e.getMessage(), ERROR);
         } catch (NullPointerException e) {
-            printer.println("Вы не ввели название файла", ERROR);
+            printer.println("You didn't enter the file name", ERROR);
         }
-        return null; //todo fix null
+        return null;
     }
 
     public JsonFile getJsonFileByName() {
         try {
             return new JsonFile(this.getTextFileByName());
-        } catch (FileReadPermissionException | NullPointerException e) {
+        } catch (NullPointerException e) {
             printer.println(e.getMessage(), ERROR);
         }
         return null;

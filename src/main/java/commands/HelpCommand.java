@@ -4,7 +4,7 @@ import io.Printer;
 
 import java.util.Map;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 

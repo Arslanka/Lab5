@@ -1,6 +1,7 @@
 package data;
 
-import java.lang.IllegalArgumentException;
+import exceptions.InvalidObjectFieldException;
+
 import java.util.Objects;
 
 public class Location {
@@ -24,34 +25,34 @@ public class Location {
         return z;
     }
 
-    public void setX(Integer x) throws IllegalArgumentException {
+    public void setX(Integer x) throws InvalidObjectFieldException {
         if (x == null) {
-            throw new IllegalArgumentException("Координата X не может быть null");
+            throw new InvalidObjectFieldException("The X coordinate cannot be null");
         }
         this.x = x;
     }
 
-    public void setY(Integer y) {
+    public void setY(Integer y) throws InvalidObjectFieldException {
         if (y == null) {
-            throw new IllegalArgumentException("Координата Y не может быть null");
+            throw new InvalidObjectFieldException("The Y coordinate cannot be null");
         }
         this.y = y;
     }
 
-    public void setZ(Integer z) throws IllegalArgumentException {
+    public void setZ(Integer z) throws InvalidObjectFieldException {
         if (z == null) {
-            throw new IllegalArgumentException("Координата Z не может быть null");
+            throw new InvalidObjectFieldException("The Z coordinate cannot be null");
         }
         this.z = z;
     }
 
-    public void setName(String name) throws IllegalArgumentException { //IncorrectInputException
+    public void setName(String name) throws InvalidObjectFieldException {
         if (name == null) {
-            throw new IllegalArgumentException("Имя не может быть null"); //Обернуть эксепшны
+            throw new InvalidObjectFieldException("The name cannot be null");
         }
 
         if (name.length() > 346) {
-            throw new IllegalArgumentException("Длина имени не может быть больше 346");
+            throw new InvalidObjectFieldException("The length of the name cannot be more than 346");
         }
         this.name = name;
     }
@@ -67,22 +68,22 @@ public class Location {
             newLocation = new Location();
         }
 
-        public Builder withName(String name) throws IllegalArgumentException {
+        public Builder withName(String name) throws InvalidObjectFieldException {
             newLocation.setName(name);
             return this;
         }
 
-        public Builder withX(Integer x) throws IllegalArgumentException {
+        public Builder withX(Integer x) throws InvalidObjectFieldException {
             newLocation.setX(x);
             return this;
         }
 
-        public Builder withY(Integer y) throws IllegalArgumentException {
+        public Builder withY(Integer y) throws InvalidObjectFieldException {
             newLocation.setY(y);
             return this;
         }
 
-        public Builder withZ(Integer z) throws IllegalArgumentException {
+        public Builder withZ(Integer z) throws InvalidObjectFieldException {
             newLocation.setZ(z);
             return this;
         }
@@ -92,7 +93,7 @@ public class Location {
         }
     }
 
-    public Location validated() {
+    public Location validated() throws InvalidObjectFieldException {
         setX(this.x);
         setY(this.y);
         setZ(this.z);

@@ -3,7 +3,7 @@ package commands;
 import collection.Collection;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.ERROR;
 
 public class ShowCommand implements Command {
@@ -35,7 +35,7 @@ public class ShowCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Выводит все элементы коллекции";
+        return "Outputs all elements of the collection";
     }
 
     @Override

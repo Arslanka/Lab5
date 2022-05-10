@@ -1,5 +1,7 @@
 package data;
 
+import exceptions.InvalidObjectFieldException;
+
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -16,12 +18,12 @@ public class Person implements Comparable<Person> {
         return name;
     }
 
-    public void setName(String name) throws IllegalArgumentException {
+    public void setName(String name) throws InvalidObjectFieldException {
         if (name == null) {
-            throw new IllegalArgumentException("Имя не может быть null");
+            throw new InvalidObjectFieldException("The name cannot be null");
         }
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Имя не может быть \"");
+            throw new InvalidObjectFieldException("The name cannot be \"");
         }
         this.name = name;
     }
@@ -30,9 +32,9 @@ public class Person implements Comparable<Person> {
         return birthday;
     }
 
-    public void setBirthday(ZonedDateTime birthday) throws IllegalArgumentException {
+    public void setBirthday(ZonedDateTime birthday) throws InvalidObjectFieldException {
         if (birthday == null) {
-            throw new IllegalArgumentException("День рождения не может быть null");
+            throw new InvalidObjectFieldException("Birthday cannot be null");
         }
         this.birthday = birthday;
     }
@@ -41,9 +43,9 @@ public class Person implements Comparable<Person> {
         return nationality;
     }
 
-    public void setNationality(Country nationality) {
+    public void setNationality(Country nationality) throws InvalidObjectFieldException {
         if (nationality == null) {
-            throw new IllegalArgumentException("Национальность не может быть null");
+            throw new InvalidObjectFieldException("Nationality cannot be null");
         }
         this.nationality = nationality;
     }
@@ -68,32 +70,32 @@ public class Person implements Comparable<Person> {
             newPerson = new Person();
         }
 
-        public Builder withName(String name) throws IllegalArgumentException {
+        public Builder withName(String name) throws InvalidObjectFieldException {
             newPerson.setName(name);
             return this;
         }
 
-        public Builder withBirthday(java.time.ZonedDateTime birthday) throws IllegalArgumentException {
+        public Builder withBirthday(java.time.ZonedDateTime birthday) throws InvalidObjectFieldException {
             newPerson.setBirthday(birthday);
             return this;
         }
 
-        public Builder withNationality(Country nationality) throws IllegalArgumentException {
+        public Builder withNationality(Country nationality) throws InvalidObjectFieldException {
             newPerson.setNationality(nationality);
             return this;
         }
 
-        public Builder withLocation(Location location) throws IllegalArgumentException {
+        public Builder withLocation(Location location) throws InvalidObjectFieldException {
             newPerson.setLocation(location);
             return this;
         }
 
-        public Person build() throws IllegalArgumentException {
+        public Person build() throws InvalidObjectFieldException {
             return newPerson;
         }
     }
 
-    public Person validated() {
+    public Person validated() throws InvalidObjectFieldException {
         setName(this.name);
         setBirthday(this.birthday);
         setNationality(this.nationality);

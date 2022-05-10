@@ -1,6 +1,7 @@
 package data;
 
 import collection.Collection;
+import exceptions.InvalidObjectFieldException;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -30,12 +31,12 @@ public class Dragon implements Comparable<Dragon> {
         return name;
     }
 
-    public void setName(String name) throws IllegalArgumentException {
+    public void setName(String name) throws InvalidObjectFieldException {
         if (name == null) {
-            throw new IllegalArgumentException("Имя не может быть null");
+            throw new InvalidObjectFieldException("The name cannot be null");
         }
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Имя не может быть \"\"");
+            throw new InvalidObjectFieldException("The name cannot be \"\"");
         }
         this.name = name;
     }
@@ -44,8 +45,8 @@ public class Dragon implements Comparable<Dragon> {
         return coordinates;
     }
 
-    public void setCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-        if (coordinates == null) throw new IllegalArgumentException("Координаты не могут быть null");
+    public void setCoordinates(Coordinates coordinates) throws InvalidObjectFieldException {
+        if (coordinates == null) throw new InvalidObjectFieldException("The coordinates cannot be null");
         this.coordinates = coordinates;
     }
 
@@ -61,16 +62,17 @@ public class Dragon implements Comparable<Dragon> {
         return age;
     }
 
-    public void setAge(Long age) throws IllegalArgumentException {
-        if (age == null) throw new IllegalArgumentException("Возраст не может быть null");
-        if (age <= 0) throw new IllegalArgumentException("Возраст не может быть меньше или равен 0");
+    public void setAge(Long age) throws InvalidObjectFieldException {
+        if (age == null) throw new InvalidObjectFieldException("The age cannot be null");
+        if (age <= 0) throw new InvalidObjectFieldException("The age cannot be less than or equal to 0");
         this.age = age;
     }
 
-    public void setId(Integer id) {
-        if (id <= 0) throw new IllegalArgumentException("Значение id должно быть положительным");
+    public void setId(Integer id) throws InvalidObjectFieldException {
+        if (id == null) throw new InvalidObjectFieldException("The id cannot be null");
+        if (id <= 0) throw new InvalidObjectFieldException("The id value must be positive");
         if (id >= Integer.MAX_VALUE)
-            throw new IllegalArgumentException("Значение id должно быть меньше чем " + Integer.MAX_VALUE);
+            throw new InvalidObjectFieldException("The id value must be less than " + Integer.MAX_VALUE);
         this.id = id;
     }
 
@@ -78,9 +80,9 @@ public class Dragon implements Comparable<Dragon> {
         return weight;
     }
 
-    public void setWeight(Float weight) throws IllegalArgumentException {
-        if (weight == null) throw new IllegalArgumentException("Вec не может быть null");
-        if (weight <= 0) throw new IllegalArgumentException("Вec не может быть меньше или равен 0");
+    public void setWeight(Float weight) throws InvalidObjectFieldException {
+        if (weight == null) throw new InvalidObjectFieldException("The weight cannot be null");
+        if (weight <= 0) throw new InvalidObjectFieldException("The weight cannot be less than or equal to 0");
         this.weight = weight;
     }
 
@@ -88,8 +90,8 @@ public class Dragon implements Comparable<Dragon> {
         return color;
     }
 
-    public void setColor(Color color) throws IllegalArgumentException {
-        if (color == null) throw new IllegalArgumentException("Цвет не может быть null");
+    public void setColor(Color color) throws InvalidObjectFieldException {
+        if (color == null) throw new InvalidObjectFieldException("The color cannot be null");
         this.color = color;
     }
 
@@ -97,8 +99,8 @@ public class Dragon implements Comparable<Dragon> {
         return type;
     }
 
-    public void setType(DragonType type) {
-        if (type == null) throw new IllegalArgumentException("Тип не может быть null");
+    public void setType(DragonType type) throws InvalidObjectFieldException {
+        if (type == null) throw new InvalidObjectFieldException("The type cannot be null");
         this.type = type;
     }
 
@@ -106,8 +108,8 @@ public class Dragon implements Comparable<Dragon> {
         return killer;
     }
 
-    public void setKiller(Person killer) {
-        if (killer == null) throw new IllegalArgumentException("Киллер не может быть null");
+    public void setKiller(Person killer) throws InvalidObjectFieldException {
+        if (killer == null) throw new InvalidObjectFieldException("The killer cannot be null");
         this.killer = killer;
     }
 
@@ -124,12 +126,12 @@ public class Dragon implements Comparable<Dragon> {
         }
 
 
-        public Builder withName(String name) throws IllegalArgumentException {
+        public Builder withName(String name) throws InvalidObjectFieldException {
             newDragon.setName(name);
             return this;
         }
 
-        public Builder withCoordinates(Coordinates coordinates) throws IllegalArgumentException {
+        public Builder withCoordinates(Coordinates coordinates) throws InvalidObjectFieldException {
             newDragon.setCoordinates(coordinates);
             return this;
         }
@@ -139,27 +141,27 @@ public class Dragon implements Comparable<Dragon> {
             return this;
         }
 
-        public Builder withAge(Long age) throws IllegalArgumentException {
+        public Builder withAge(Long age) throws InvalidObjectFieldException {
             newDragon.setAge(age);
             return this;
         }
 
-        public Builder withWeight(Float weight) throws IllegalArgumentException {
+        public Builder withWeight(Float weight) throws InvalidObjectFieldException {
             newDragon.setWeight(weight);
             return this;
         }
 
-        public Builder withColor(Color color) throws IllegalArgumentException {
+        public Builder withColor(Color color) throws InvalidObjectFieldException {
             newDragon.setColor(color);
             return this;
         }
 
-        public Builder withType(DragonType dragonType) throws IllegalArgumentException {
+        public Builder withType(DragonType dragonType) throws InvalidObjectFieldException {
             newDragon.setType(dragonType);
             return this;
         }
 
-        public Builder withPerson(Person killer) throws IllegalArgumentException {
+        public Builder withPerson(Person killer) throws InvalidObjectFieldException {
             newDragon.setKiller(killer);
             return this;
         }
@@ -171,7 +173,7 @@ public class Dragon implements Comparable<Dragon> {
 
     }
 
-    public Dragon validated() {
+    public Dragon validated() throws InvalidObjectFieldException {
         setName(this.name);
         setId(this.id);
         setCreationDate();

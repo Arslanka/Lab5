@@ -3,7 +3,7 @@ package commands;
 import collection.Collection;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 
@@ -19,7 +19,7 @@ public class ClearCommand implements Command {
     @Override
     public boolean execute(Object... args) {
         collection.clear();
-        printer.println("Коллекция очищена", HELP);
+        printer.println("The collection has been cleared", HELP);
         printer.println(SEPARATOR, ERROR);
         return true;
     }
@@ -36,7 +36,7 @@ public class ClearCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Очищает коллекцию";
+        return "Clears the collection";
     }
 
     @Override

@@ -2,9 +2,10 @@ package commands;
 
 import collection.Collection;
 import data.Dragon;
+import exceptions.ExecutionException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 
@@ -21,13 +22,10 @@ public class RemoveLowerCommand implements Command {
     public boolean execute(Object... args) {
         try {
             collection.removeLower((Dragon) args[0]);
-            printer.println("Элементы, значение которых меньше заданного, успешно удалены из коллекции", HELP);
+            printer.println("Items whose value is lower than the specified value have been successfully removed from the collection", HELP);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (IllegalArgumentException e) {
-            throw  new IllegalArgumentException(e.getMessage());
+            throw new ExecutionException("You have not entered an element for comparison.");
         }
         return true;
     }
@@ -44,7 +42,7 @@ public class RemoveLowerCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Удаляет из коллекции все элементы, меньшие, чем заданный";
+        return "Removes all items smaller than the specified one from the collection";
     }
 
     @Override

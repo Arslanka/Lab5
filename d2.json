@@ -1,0 +1,26 @@
+[
+  {
+    "id": 30,
+    "name": "Roma",
+    "coordinates": {
+      "x": 412,
+      "y": 23.0
+    },
+    "creationDate": "2011-12-03T10:15:30+01:00",
+    "age": 23,
+    "weight": 65.5,
+    "color": "GREEN",
+    "type": "AIR",
+    "killer": {
+      "name": "Vlad",
+      "birthday": "2011-12-03T10:15:30+01:00",
+      "nationality": "GERMANY",
+      "location": {
+        "x": 10,
+        "y": 20,
+        "z": 30,
+        "name": "Alpi"
+      }
+    }
+  }
+]

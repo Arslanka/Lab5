@@ -2,9 +2,10 @@ package commands;
 
 import collection.Collection;
 import data.Dragon;
+import exceptions.ExecutionException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 
@@ -23,13 +24,10 @@ public class AddIfMaxCommand implements Command {
         try {
             Dragon dragon = (Dragon) args[0];
             collection.addIfMax(dragon);
-            printer.println("Элемент успешно добавлен в коллекцию", HELP);
+            printer.println("The item was successfully added to the collection", HELP);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new ExecutionException("You have not entered an item to add to the collection.");
         }
         return true;
     }
@@ -46,7 +44,7 @@ public class AddIfMaxCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Добавляет новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции";
+        return "Adds a new element to the collection if its value exceeds the value of the largest element of this collection";
     }
 
     @Override

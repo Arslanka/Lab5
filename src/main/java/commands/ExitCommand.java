@@ -14,7 +14,7 @@ public class ExitCommand implements Command {
 
     @Override
     public boolean execute(Object... args) {
-        printer.println("Программа завершена", ERROR);
+        printer.println("The program is completed", ERROR);
         return false;
     }
 
@@ -30,11 +30,11 @@ public class ExitCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Останавливает выполнение программы";
+        return "Stops program execution";
     }
 
     @Override
-    public Class[] getArgumentsClasses() {
+    public Class<?>[] getArgumentsClasses() {
         return new Class[]{};
     }
 }

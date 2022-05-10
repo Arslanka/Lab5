@@ -1,7 +1,10 @@
 package commands;
 
+import exceptions.ExecutionException;
+import exceptions.ExistingIdException;
+
 public interface Command {
-    boolean execute(Object... args);
+    boolean execute(Object... args) throws ExecutionException, ExistingIdException;
 
     boolean withArgument();
 

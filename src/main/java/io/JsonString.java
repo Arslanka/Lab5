@@ -24,12 +24,12 @@ public class JsonString {
                                     -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString())).create();
             t = gson.fromJson(string, cls);
         } catch (JsonParseException | DateTimeParseException e) {
-            throw new JsonParseException("Ошибка парсинга Json. Данные некорректны. " + e.getMessage());
+            throw new JsonParseException("Json parsing error. The data is incorrect.\n" + e.getMessage());
         }
         return t;
     }
 
-    public Collection<Dragon> readCollection(String string) throws IOException, JsonParseException { //TODO output single El
+    public Collection<Dragon> readCollection(String string) throws IOException, JsonParseException {
         Dragon[] dragons;
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class
@@ -39,32 +39,32 @@ public class JsonString {
 
             dragons = gson.fromJson(string, Dragon[].class);
         } catch (JsonParseException | DateTimeParseException e) {
-            throw new JsonParseException("Ошибка парсинга Json. Данные некорректны. " + e.getLocalizedMessage());
+            throw new JsonParseException("Json parsing error. The data is incorrect.\n" + e.getLocalizedMessage());
         }
         return new ArrayList<>(Arrays.asList(dragons));
     }
 
-    public String get(Set<Dragon> dragonSet) throws IOException, JsonIOException { //TODO input single dragon
+    public String get(Set<Dragon> dragonSet) throws IOException, JsonIOException {
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, (JsonSerializer<ZonedDateTime>)
                             (date, type, jsonSerializationContext)
                                     -> new JsonPrimitive(date.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)))
                     .setPrettyPrinting().create();
             return (gson.toJson(dragonSet));
-        } catch (JsonParseException e) {
-            throw new IOException("Ошибка конвертации в Json. Данные в коллекции некорректны");
+        } catch (JsonIOException e) {
+            throw new JsonIOException("Error converting to Json. The data in the collection is incorrect\n" + e.getMessage());
         }
     }
 
-    public <T> String get(Class<T> t) throws IOException, JsonIOException { //TODO input single dragon
+    public <T> String get(Class<T> t) throws IOException, JsonIOException {
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, (JsonSerializer<ZonedDateTime>)
                             (date, type, jsonSerializationContext)
                                     -> new JsonPrimitive(date.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)))
                     .setPrettyPrinting().create();
             return (gson.toJson(t));
-        } catch (JsonParseException e) {
-            throw new IOException("Ошибка конвертации в Json. Данные в коллекции некорректны");
+        } catch (JsonIOException e) {
+            throw new JsonIOException("Error converting to Json. The data in the collection is incorrect\n" + e.getMessage());
         }
     }
 }

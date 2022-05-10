@@ -1,9 +1,10 @@
 package commands;
 
 import collection.Collection;
+import exceptions.ExecutionException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.ERROR;
 
 public class FilterGreaterThanAgeCommand implements Command {
@@ -22,10 +23,7 @@ public class FilterGreaterThanAgeCommand implements Command {
             collection.filterGreaterThanAge(age);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new ExecutionException("You have not entered an element to filter by collection.");
         }
         return true;
     }
@@ -42,7 +40,7 @@ public class FilterGreaterThanAgeCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Выводит элементы, значение поля age которых больше заданного";
+        return "Outputs elements whose age field value is greater than the specified one";
     }
 
     @Override

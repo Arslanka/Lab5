@@ -1,24 +1,19 @@
 package io.request;
 
+import exceptions.InvalidObjectFieldException;
 import io.Printer;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static io.ConsoleColor.*;
 
 public class RequestElement {
-    private final Scanner sc;
-    private final Printer printer;
 
-    public RequestElement(Scanner sc, Printer printer) {
-        this.sc = sc;
-        this.printer = printer;
-    }
 
-    public <T> void get(String prefix, Function<String, T> cast, Consumer<T> action, boolean toLower) {
+    public <T> void get(String prefix, Scanner sc, Printer printer, Function<String, T> cast, Consumer<T> action, boolean toLower) throws InvalidObjectFieldException {
         while (true) {
             try {
                 printer.print(prefix, FIELD);
@@ -27,13 +22,13 @@ public class RequestElement {
                 else
                     action.accept(cast.apply(sc.nextLine().trim()));
                 return;
-            } catch (IllegalStateException | IllegalArgumentException | InputMismatchException e) {
+            } catch (InvalidObjectFieldException  e) {
                 printer.println(e.getMessage(), ERROR);
             }
         }
     }
 
-    public <T> T get(String prefix, Function<String, T> action, boolean toLower) {
+    public <T> T get(String prefix, Scanner sc, Printer printer, Function<String, T> action, boolean toLower) {
         while (true) {
             try {
                 printer.print(prefix, FIELD);
@@ -41,7 +36,21 @@ public class RequestElement {
                     return action.apply(sc.nextLine().trim().toLowerCase());
                 else return action.apply(sc.nextLine().trim());
 
-            } catch (IllegalStateException | IllegalArgumentException | InputMismatchException e) {
+            } catch (InvalidObjectFieldException e) {
+                printer.println(e.getMessage(), ERROR);
+            }
+        }
+    }
+
+    public <T> boolean get(String prefix, Scanner sc, Printer printer, Function<String, T> action, Predicate<T> predicate, boolean toLower) {
+        while (true) {
+            try {
+                printer.print(prefix, FIELD);
+                if (toLower)
+                    return predicate.test(action.apply(sc.nextLine().trim().toLowerCase()));
+                else return predicate.test(action.apply(sc.nextLine().trim()));
+
+            } catch (InvalidObjectFieldException  e) {
                 printer.println(e.getMessage(), ERROR);
             }
         }

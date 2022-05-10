@@ -3,7 +3,7 @@ package commands;
 import collection.Collection;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.ERROR;
 
 public class InfoCommand implements Command {
@@ -34,7 +34,7 @@ public class InfoCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Выводит информацию о коллекции";
+        return "Displays information about the collection";
     }
 
     @Override

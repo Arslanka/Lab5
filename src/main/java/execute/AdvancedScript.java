@@ -1,133 +1,107 @@
 package execute;
 
-import com.google.gson.JsonParseException;
 import commands.*;
-import file.JsonFile;
+import exceptions.ExecutionException;
+import exceptions.RecursiveCallException;
 import file.TextFile;
-import io.JsonString;
 import io.Printer;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
-
-import static execute.Script.executableScripts;
 
 
 public class AdvancedScript {
+    protected static final Set<File> executableScripts = new HashSet<>();
     private final TextFile textFile;
     private final Map<String, Command> commandMap;
     private final Map<String, Supplier<Object[]>> supplierMap;
-    private final Printer printer;
+    private final Map<Class<?>, BiFunction<Scanner, Printer, Object>> requestMap;
 
-    public AdvancedScript(TextFile textFile, Map<String, Command> commandMap, Map<String, Supplier<Object[]>> supplierMap, Printer printer) {
+    private final Printer printer;
+    private boolean noExit = true;
+
+    public AdvancedScript(TextFile textFile, Map<String, Command> commandMap,
+                          Map<String, Supplier<Object[]>> supplierMap, Map<Class<?>, BiFunction<Scanner, Printer, Object>> requestMap,
+                          Printer printer) {
         this.textFile = textFile;
         this.commandMap = commandMap;
         this.supplierMap = supplierMap;
         this.printer = printer;
+        this.requestMap = requestMap;
     }
 
-    public boolean execute() throws IOException { //todo exceptions
-        if (executableScripts.contains(textFile.getFile()))
-            throw new IllegalStateException("Вы находитесь в процессе выполнения скрипта " + textFile + ". Ошибка выполнения скрипта");
+    public boolean execute() {
+        if (!executableScripts.isEmpty() && executableScripts.contains(textFile.getFile())) {
+            String s = textFile.getFile().toString();
+            executableScripts.remove(textFile.getFile());
+            throw new RecursiveCallException(s);
+        }
         executableScripts.add(textFile.getFile());
         ArrayList<String> stringRep = new ArrayList<>();
-        Arrays.stream(textFile.read().split("\\s+")).filter(s -> !s.isEmpty()).forEach(stringRep::add);
-        StringBuilder data = new StringBuilder();
-        String lastCommand = null;
-        CommandInterpreter commandInterpreter = new CommandInterpreter(commandMap, supplierMap, printer);
-        boolean isFirst = true, noExit = true;
+        try {
+            Arrays.stream(textFile.read().split("\\s+")).filter(s -> !s.isEmpty()).forEach(stringRep::add);
+        } catch (IOException e) {
+            executableScripts.remove(textFile.getFile());
+            throw new ExecutionException(e.getMessage());
+        }
+        ArrayList<String> data = new ArrayList<>();
+        String lastCommand = "";
+        CommandInterpreter commandInterpreter = new CommandInterpreter(commandMap, supplierMap, printer, requestMap);
+        boolean isFirst = true;
         for (String s : stringRep) {
             if (!noExit) {
                 executableScripts.remove(this.textFile.getFile());
                 return false;
             }
             if (!commandMap.containsKey(s)) {
-                data.append(s);
-                data.append(' ');
+                data.add(s);
                 continue;
             }
             if (isFirst) {
-                if (!data.toString().isEmpty()) {
+                if (!data.isEmpty()) {
                     executableScripts.remove(this.textFile.getFile());
-                    throw new ClassCastException("Вы ввели неверные данные для скрипта");
+                    throw new ExecutionException("You have entered incorrect data for the script");
                 }
                 lastCommand = s;
                 isFirst = false;
                 continue;
             }
-            if (!commandMap.get(lastCommand).withArgument()) {
-                if (!data.toString().isEmpty()) {
-                    executableScripts.remove(this.textFile.getFile());
-                    throw new ClassCastException("Вы ввели неверные данные для скрипта");
-                }
-                noExit = commandInterpreter.run(lastCommand);
-            } else {
-                if (data.toString().isEmpty()) commandInterpreter.run(lastCommand);
-                else {
-                    noExit = commandInterpreter.run(lastCommand, getCommandArgs(commandMap.get(lastCommand), data));
-                    data = new StringBuilder();
-                }
-            }
+            interpreter(data, lastCommand, commandInterpreter);
+            data.clear();
             lastCommand = s;
         }
         if (!noExit) {
             executableScripts.remove(this.textFile.getFile());
             return false;
+        } else if (lastCommand.isEmpty()) {
+            executableScripts.remove(this.textFile.getFile());
+            throw new ExecutionException("The command name was entered incorrectly");
         }
-        if (!commandMap.get(lastCommand).withArgument()) {
-            if (!data.toString().isEmpty()) {
-                executableScripts.remove(this.textFile.getFile());
-                throw new ClassCastException("Вы ввели неверные данные для скрипта");
-            }
-            commandInterpreter.run(lastCommand);
-        } else {
-            commandInterpreter.run(lastCommand, getCommandArgs(commandMap.get(lastCommand), data));
-        }
+        interpreter(data, lastCommand, commandInterpreter);
         executableScripts.remove(this.textFile.getFile());
         return false;
     }
 
-    private Object[] getCommandArgs(Command command, StringBuilder data) { //todo excep
-        Class<?>[] commandArgsClasses = command.getArgumentsClasses();
-        ArrayList<Object> commandArgs = new ArrayList<>();
-        int start = 0;
-        for (Class<?> arg : commandArgsClasses) {
-            StringBuilder argAsString = new StringBuilder();
-            JsonString jsonString = new JsonString();
-            if (command instanceof SaveCommand) {
-                try {
-                    commandArgs.add(new JsonFile(new TextFile(new File(data.toString().trim()))));
-                    break;
-                } catch (ClassCastException | JsonParseException | IOException ignored) {
-                }
-            } else if (command instanceof ExecuteAdvancedScriptCommand) {
-                try {
-                    commandArgs.add(new AdvancedScript(new TextFile(new File(data.toString().trim())), commandMap, supplierMap, printer));
-                    break;
-                } catch (ClassCastException | JsonParseException | IOException ignored) {
-                }
-            } else {
-                for (; start < data.length(); ++start) {
-                    if (data.charAt(start) == ' ') {
-                        try {
-                            Object obj = jsonString.read(argAsString.toString(), arg);
-                            commandArgs.add(obj);
-                            ++start;
-                            break;
-                        } catch (JsonParseException | IOException ignored) {
-                        }
-                    } else {
-                        argAsString.append(data.charAt(start));
-                    }
-                }
+    private void interpreter(ArrayList<String> data, String lastCommand, CommandInterpreter commandInterpreter) {
+        ArrayList<String> list = new ArrayList<>();
+        if (!commandMap.get(lastCommand).withArgument()) {
+            if (!data.isEmpty()) {
+                executableScripts.remove(this.textFile.getFile());
+                throw new ExecutionException("You have entered incorrect data for the script");
+            }
+            list.add(lastCommand);
+            noExit = commandInterpreter.run(list);
+        } else {
+            list.add(lastCommand);
+            if (data.isEmpty()) commandInterpreter.run(list);
+            else {
+                noExit = commandInterpreter.run(list,
+                        new CommandArguments(commandMap, supplierMap, commandMap.get(lastCommand), requestMap).get(data));
             }
         }
-        if (commandArgs.size() != commandArgsClasses.length && !data.toString().isEmpty())
-            throw new JsonParseException("Вы ввели неверные аргументы в json в команде " + command.getName());
-        return commandArgs.toArray();
     }
-
 }
 
 

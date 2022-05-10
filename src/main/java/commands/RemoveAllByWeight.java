@@ -1,9 +1,10 @@
 package commands;
 
 import collection.Collection;
+import exceptions.ExecutionException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 
@@ -21,14 +22,11 @@ public class RemoveAllByWeight implements Command {
         try {
             Float weight = (Float) args[0];
             collection.removeByWeight(weight);
-            printer.println("Элементы, значение поля weight которых эквивалентно заданному, успешно удалены из коллекции", HELP);
+            printer.println(String.format("%s %f %s", "Items whose weight field value is equivalent to", weight, "the specified one have been successfully removed from the collection"), HELP);
             printer.println(SEPARATOR, ERROR);
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw  new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (IllegalArgumentException e) {
-           throw  new IllegalArgumentException(e.getMessage());
+            throw new ExecutionException("You have not entered an item to add to the collection.");
         }
         return true;
     }
@@ -45,7 +43,7 @@ public class RemoveAllByWeight implements Command {
 
     @Override
     public String getDescription() {
-        return "Удаляет из коллекции все элементы, значение поля weight которых эквивалентно заданному";
+        return "Removes from the collection all elements whose weight field value is equivalent to the specified";
     }
 
     @Override

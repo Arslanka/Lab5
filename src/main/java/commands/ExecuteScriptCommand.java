@@ -1,28 +1,22 @@
 package commands;
 
-import execute.AdvancedScript;
-import execute.Script;
+import exceptions.ExecutionException;
+import exceptions.RecursiveCallException;
 import io.Printer;
+import execute.AdvancedScript;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ExecuteScriptCommand implements Command {
-    private final Printer printer;
-
-    public ExecuteScriptCommand(Printer printer) {
-        this.printer = printer;
-    }
 
     @Override
     public boolean execute(Object... args) {
         try {
-            Script script = (Script) args[0];
+            AdvancedScript script = (AdvancedScript) args[0];
             return script.execute();
-        } catch (IOException | ClassCastException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Вы ввели неверный аргумент для команды");
+        } catch (ExecutionException e) {
+            throw new ExecutionException("Error executing the execute_script command\n" + e.getMessage());
         }
     }
 
@@ -38,7 +32,7 @@ public class ExecuteScriptCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Считывает и исполняет скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь";
+        return "Reads and executes the script from the specified file.";
     }
 
     @Override

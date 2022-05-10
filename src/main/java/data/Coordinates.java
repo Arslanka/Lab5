@@ -1,5 +1,7 @@
 package data;
 
+import exceptions.InvalidObjectFieldException;
+
 import java.util.Objects;
 
 public class Coordinates {
@@ -13,9 +15,9 @@ public class Coordinates {
         return x;
     }
 
-    public void setX(Integer x) throws IllegalArgumentException {
+    public void setX(Integer x) throws InvalidObjectFieldException {
         if (x == null) {
-            throw new IllegalArgumentException("Координата X не может быть null");
+            throw new InvalidObjectFieldException("The X coordinate cannot be null");
         }
         this.x = x;
     }
@@ -24,12 +26,12 @@ public class Coordinates {
         return y;
     }
 
-    public void setY(Double y) {
+    public void setY(Double y) throws InvalidObjectFieldException {
         if (y == null) {
-            throw new IllegalArgumentException("Координата Y не может быть null");
+            throw new InvalidObjectFieldException("The Y coordinate cannot be null");
         }
         if (y > 508)
-            throw new IllegalArgumentException("Координата Y не может быть больше 508");
+            throw new InvalidObjectFieldException("The Y coordinate cannot be greater than 508");
         this.y = y;
     }
 
@@ -41,12 +43,12 @@ public class Coordinates {
             newCoordinates = new Coordinates();
         }
 
-        public Builder withX(Integer x) throws IllegalArgumentException {
+        public Builder withX(Integer x) throws InvalidObjectFieldException {
             newCoordinates.setX(x);
             return this;
         }
 
-        public Builder withY(Double y) throws IllegalArgumentException {
+        public Builder withY(Double y) throws InvalidObjectFieldException {
             newCoordinates.setY(y);
             return this;
         }
@@ -56,7 +58,7 @@ public class Coordinates {
         }
     }
 
-    public Coordinates validated() {
+    public Coordinates validated() throws InvalidObjectFieldException {
         setX(this.x);
         setY(this.y);
         return this;

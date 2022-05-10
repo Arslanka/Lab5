@@ -2,6 +2,10 @@ package collection;
 
 import data.Dragon;
 import data.Person;
+import exceptions.ExecutionException;
+import exceptions.ExistingIdException;
+import exceptions.IncorrectIdException;
+import exceptions.InvalidObjectFieldException;
 import file.JsonFile;
 import io.Printer;
 
@@ -13,38 +17,39 @@ import static io.ConsoleColor.*;
 
 public class Collection {
     private final HashSet<Dragon> dragonHashSet = new HashSet<>();
-    private final Printer printer = new Printer();
+    private final Printer printer = new Printer(false);
     public static final TreeMap<Integer, Dragon> idMap = new TreeMap<>();
     private final LocalDateTime creationDate = LocalDateTime.now();
 
     public Collection() {
     }
 
-    public void add(Dragon dragon) {
+    public void add(Dragon dragon) throws ExistingIdException, ExecutionException {
         Integer dragonId = dragon.getId();
         try {
             if (dragon.validated() != null)
                 if (idMap.containsKey(dragonId))
-                    throw new IllegalArgumentException("В коллекции уже есть объект с id " + dragonId + ". Пожалуйста, введите другое id");
+                    if (idMap.containsKey(dragonId))
+                        throw new ExistingIdException(String
+                                .format("%s %d %s", "There is already an object with id ", dragonId, "in the collection"));
             idMap.put(dragonId, dragon);
             dragonHashSet.add(dragon);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Вы ввели некорректные поля для объекта");
+        } catch (InvalidObjectFieldException e) {
+            throw new ExecutionException("You have entered incorrect fields for the dragon object\n" + e.getMessage(), e);
         }
     }
 
     public void add(java.util.Collection<Dragon> dragonList) {
-        int dragonCount = 0; //Todo change
+        int dragonCount = 0;
         for (Dragon d : dragonList) {
             try {
-                if (d.validated() != null) { //Todo fix
-                    ++dragonCount;
-                }
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(e.getMessage() + '\n' + ((dragonCount + 1) + " элемент файла не валиден"));
+                add(d);
+                dragonCount++;
+            } catch (ExecutionException e) {
+                throw new ExecutionException("The file element with the number "
+                        + ((dragonCount + 1) + " is not valid\n") + e.getMessage(), e);
             }
         }
-        dragonList.forEach(this::add);
     }
 
     public void show() {
@@ -59,23 +64,23 @@ public class Collection {
                 dragonHashSet.add(dragon);
                 idMap.put(id, dragon);
             }
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Вы ввели некорректные поля для объекта");
+        } catch (InvalidObjectFieldException e) {
+            throw new ExecutionException("You have entered incorrect fields for the dragon object", e);
         }
     }
 
     public void removeById(Integer id) {
-        if (!idMap.containsKey(id))
-            throw new IllegalArgumentException("Такого id нет в коллекции. Исполните команду с корректным id.");
-        dragonHashSet.remove(idMap.get(id));
-        idMap.remove(id);
+        if (validatedId(id) > 0) {
+            dragonHashSet.remove(idMap.get(id));
+            idMap.remove(id);
+        }
     }
 
     public void clear() {
         dragonHashSet.clear();
     }
 
-    public void save(JsonFile jsonFile) throws IOException {
+    public void save(JsonFile jsonFile) {
         jsonFile.write(dragonHashSet);
     }
 
@@ -103,13 +108,13 @@ public class Collection {
 
     public void info() {
         String collectionName = "HashSet<Dragon> dragonHashSet";
-        printer.println(String.format("%-30s", "Тип коллекции: ") + " " + collectionName, HELP);
-        printer.println(String.format("%-30s", "Дата и время создания коллекции ") + " " + creationDate, HELP);
-        printer.println(String.format("%-30s", "Размер коллекции: ") + " " + dragonHashSet.size(), HELP);
+        printer.println(String.format("%-40s", "Collection Type: ") + " " + collectionName, HELP);
+        printer.println(String.format("%-40s", "Date and time of creation: ") + " " + creationDate, HELP);
+        printer.println(String.format("%-40s", "Collection size: ") + " " + dragonHashSet.size(), HELP);
     }
 
     public void filterGreaterThanAge(Long age) {
-        printer.println("Элементы коллекции, у которых поле age больше заданного: ", HELP);
+        printer.println("Collection items with an age field greater than the specified one: ", HELP);
 
         dragonHashSet
                 .stream()
@@ -123,7 +128,7 @@ public class Collection {
                 .stream()
                 .filter(d -> d.getKiller().compareTo(killer) > 0)
                 .count();
-        printer.println("Элементов коллекции, у которых поле killer больше заданного – " + cnt, HELP);
+        printer.println("Collection elements that have a killer field greater than the specified one – " + cnt, HELP);
     }
 
     public void addIfMax(Dragon dragon) {
@@ -141,9 +146,10 @@ public class Collection {
         return idMap.lastKey() + 1;
     }
 
-    public boolean containsId(Integer id) {
-        if (!idMap.containsKey(id)) throw new IllegalArgumentException("Вы ввели некорректный id.");
-        return true;
+    public Integer validatedId(Integer id) {
+        if (!idMap.containsKey(id))
+            throw new IncorrectIdException(String.format("%s %d %s", "The id with the number", id, "is not in the collection."));
+        return id;
     }
 }
 

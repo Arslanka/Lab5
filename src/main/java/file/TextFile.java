@@ -1,12 +1,14 @@
 package file;
 
+import exceptions.FIleReadingException;
+import exceptions.FIleWritingException;
+import exceptions.FileLengthLimitException;
 import exceptions.FileReadPermissionException;
 import io.Readable;
 import io.Writeable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystemException;
 
 public class TextFile implements Readable, Writeable {
     private final File file;
@@ -17,32 +19,40 @@ public class TextFile implements Readable, Writeable {
     }
 
     @Override
-    public String read() throws IOException { //TODO Exceptions, emptyFile;
-        final StringBuilder builder = new StringBuilder();
-        final Reader in = new FileReader(file);
-        while (true) {
-            int ch = in.read();
-            if (ch == -1) {
-                break;
+    public String read() throws IOException {
+        try {
+            final StringBuilder builder = new StringBuilder();
+            final Reader in = new FileReader(file);
+            while (true) {
+                int ch = in.read();
+                if (ch == -1) {
+                    break;
+                }
+                builder.append((char) ch);
+                if (builder.length() > MAX_FILE_LENGTH)
+                    throw new FileLengthLimitException("The number of characters in the file exceeds the limit – " + MAX_FILE_LENGTH);
             }
-            builder.append((char) ch);
-            if (builder.length() > MAX_FILE_LENGTH)
-                throw new FileSystemException("Количество символов в файле превышает лимит – " + MAX_FILE_LENGTH);
+            in.close();
+            if (builder.toString().isEmpty()) {
+                throw new FileLengthLimitException("The file is empty. Please fill it in with the data.");
+            }
+            return builder.toString();
+        } catch (IOException e) {
+            throw new FIleReadingException("File reading error\n" + e.getMessage());
         }
-        in.close();
-        if (builder.toString().isEmpty()) {
-            throw new IOException("Файл пуст. Пожалуйста, заполните его данными.");
-        }
-        return builder.toString();
     }
 
     @Override
     public void write(String string) throws IOException {
-        final OutputStreamWriter streamWriter
-                = new OutputStreamWriter(
-                new FileOutputStream(this.file), StandardCharsets.UTF_8);
-        streamWriter.write(string);
-        streamWriter.close();
+        try {
+            final OutputStreamWriter streamWriter
+                    = new OutputStreamWriter(
+                    new FileOutputStream(this.file), StandardCharsets.UTF_8);
+            streamWriter.write(string);
+            streamWriter.close();
+        } catch (IOException e) {
+            throw new FIleWritingException("File writing error\n" + e.getMessage());
+        }
 
     }
 
@@ -55,15 +65,15 @@ public class TextFile implements Readable, Writeable {
         return this.file;
     }
 
-    public File validated(File file) throws FileNotFoundException {
+    public File validated(File file) throws FileNotFoundException, FileReadPermissionException {
         if (!file.exists()) {
-            throw new FileNotFoundException("Файла с таким названием не существует. Пожалуйста, введите корректные данные");
+            throw new FileNotFoundException("There is no file with name " + file + '.');
         }
         if (file.isDirectory()) {
-            throw new FileNotFoundException("По введенному пути находится директория, а не файл. Пожалуйста, введите корректные данные");
+            throw new FileNotFoundException("The path you entered is a directory, not a file.");
         }
         if (!file.canRead()) {
-            throw new FileReadPermissionException("Нет прав для чтения файла. Пожалуйста, введите корректные данные"); //TODO FileReadPermissionException
+            throw new FileReadPermissionException("No rights to read the file " + file + '.');
         }
         return file;
     }

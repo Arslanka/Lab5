@@ -2,9 +2,10 @@ package commands;
 
 import collection.Collection;
 import data.Person;
+import exceptions.ExecutionException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.ERROR;
 
 public class CountGreaterThanKillerCommand implements Command {
@@ -23,10 +24,7 @@ public class CountGreaterThanKillerCommand implements Command {
             collection.countGreaterThanKiller(person);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new ExecutionException("You have not entered an item to add to the collection.");
         }
         return true;
     }
@@ -43,7 +41,7 @@ public class CountGreaterThanKillerCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Выводит количество элементов, значение поля killer которых больше заданного";
+        return "Outputs the number of elements whose killer field value is greater than the specified one";
     }
 
     @Override

@@ -3,6 +3,7 @@ package io;
 import data.Color;
 import data.Country;
 import data.DragonType;
+import exceptions.FieldTypeMismatchException;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -21,24 +22,24 @@ public class InputData {
         try {
             return (name.equals("") ? null : name);
         } catch (InputMismatchException e) {
-            throw new IllegalArgumentException("Вы ввели некорректное имя. Пожалуйста, введите имя еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect name. Please enter the name again");
         }
     }
+
     public String getFileName(String fileName) {
         try {
             return (fileName.equals("") ? null : fileName);
         } catch (InputMismatchException e) {
-            throw new IllegalArgumentException("Вы ввели некорректное название файла. Пожалуйста, введите название еще раз");
+            throw new FieldTypeMismatchException("You have entered an incorrect file name. Please enter the name again");
         }
     }
 
     public ZonedDateTime getDateTime(String dateTime) {
         try {
             ZoneId timeZone = ZoneId.systemDefault();
-            ZonedDateTime zonedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME).atZone(timeZone);
-            return zonedDateTime;
+            return LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME).atZone(timeZone);
         } catch (DateTimeException e) {
-            throw new IllegalStateException("Вы ввели некорректную дату. Пожалуйста, введите дату  еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect date. Please enter the date again");
         }
     }
 
@@ -46,7 +47,7 @@ public class InputData {
         try {
             return Integer.parseInt(intCoordinate);
         } catch (InputMismatchException | NumberFormatException | IllegalStateException e) {
-            throw new IllegalStateException("Вы ввели некорректную координату" + ". Пожалуйста, введите  координату еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect coordinate. Please enter the coordinate again");
         }
     }
 
@@ -54,7 +55,7 @@ public class InputData {
         try {
             return Double.parseDouble(doubleCoordinate);
         } catch (InputMismatchException | NumberFormatException | IllegalStateException e) {
-            throw new IllegalStateException("Вы ввели некорректную координату с плавающей точкой" + ". Пожалуйста, введите координату еще раз");
+            throw new FieldTypeMismatchException("You have entered an incorrect floating point coordinate. Please enter the coordinate again");
         }
     }
 
@@ -63,7 +64,7 @@ public class InputData {
         try {
             return Country.valueOf(nationality.toUpperCase());
         } catch (InputMismatchException | IllegalArgumentException e) {
-            throw new IllegalStateException("Вы ввели некорректную национальность. Пожалуйста, введите национальность еще раз");
+            throw new FieldTypeMismatchException("You have entered an incorrect nationality. Please enter your nationality again");
         }
     }
 
@@ -71,7 +72,7 @@ public class InputData {
         try {
             return Color.valueOf(color.toUpperCase());
         } catch (InputMismatchException | IllegalArgumentException e) {
-            throw new IllegalStateException("Вы ввели некорректный цвет. Пожалуйста, введите цвет еще раз");
+            throw new FieldTypeMismatchException("You have entered an incorrect color. Please enter the color again");
         }
     }
 
@@ -79,7 +80,7 @@ public class InputData {
         try {
             return DragonType.valueOf(type.toUpperCase());
         } catch (InputMismatchException | IllegalArgumentException e) {
-            throw new IllegalStateException("Вы ввели некорректный тип. Пожалуйста, введите тип еще раз");
+            throw new FieldTypeMismatchException("You have entered an incorrect type. Please enter the type again");
         }
     }
 
@@ -87,23 +88,23 @@ public class InputData {
         try {
             return Long.parseLong(age);
         } catch (InputMismatchException | NumberFormatException e) {
-            throw new IllegalStateException("Вы ввели некорректный возраст. Пожалуйста, введите возраст еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect age. Please enter the age again");
         }
     }
 
     public Float getWeight(String weight) {
         try {
-            return  Float.parseFloat(weight);
+            return Float.parseFloat(weight);
         } catch (InputMismatchException | NumberFormatException e) {
-            throw new IllegalStateException("Вы ввели некорректный вес. Пожалуйста, введите вес еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect weight. Please enter the weight again");
         }
     }
 
     public Integer getId(String id) {
         try {
-            return Integer.parseInt(id);
+            return (id.equals("") ? null : Integer.parseInt(id));
         } catch (InputMismatchException | NumberFormatException e) {
-            throw new IllegalStateException("Вы ввели некорректный id. Пожалуйста, введите id еще раз");
+            throw new FieldTypeMismatchException("You entered an incorrect id. Please enter the id again");
         }
     }
 }

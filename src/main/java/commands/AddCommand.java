@@ -2,9 +2,12 @@ package commands;
 
 import collection.Collection;
 import data.Dragon;
+import exceptions.ExecutionException;
+import exceptions.ExistingIdException;
+import exceptions.InvalidObjectFieldException;
 import io.Printer;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
@@ -20,15 +23,16 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public boolean execute(Object... args) {
+    public boolean execute(Object... args) throws ExistingIdException {
         try {
             Dragon dragon = (Dragon) args[0];
             collection.add(dragon);
-            printer.println("Элемент успешно добавлен в коллекцию", HELP);
+            printer.println("The item was successfully added to the collection", HELP);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
+            throw new ExecutionException("You have not entered an item to add to the collection.");
+        } catch (InvalidObjectFieldException e) {
+            throw new ExecutionException("Error executing the add command\n" + e.getMessage());
         }
         return true;
     }
@@ -46,7 +50,7 @@ public class AddCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Добавляет элемент в коллекцию";
+        return "Adds an item to the collection";
     }
 
     @Override

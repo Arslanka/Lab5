@@ -1,13 +1,14 @@
 package commands;
 
 import collection.Collection;
+import exceptions.ExecutionException;
 import file.JsonFile;
 import io.Printer;
 
 import java.io.File;
 import java.io.IOException;
 
-import static io.Console.SEPARATOR;
+import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
 import static io.ConsoleColor.ERROR;
 
@@ -25,14 +26,10 @@ public class SaveCommand implements Command {
     public boolean execute(Object... args) {
         try {
             collection.save((JsonFile) args[0]);
-            printer.println("Коллекция сохранена в файл " + args[0], HELP);
+            printer.println("The collection is saved to a file " + args[0], HELP);
             printer.println(SEPARATOR, ERROR);
-
-        } catch (ArrayIndexOutOfBoundsException | IOException e) {
-            throw new IllegalArgumentException("Вы не ввели элемент, который необходимо добавить в коллекцию." +
-                    " Пожалуйста, попробуйте еще раз");
-        } catch (NullPointerException e){
-            throw new IllegalStateException("");
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            throw new ExecutionException("You have not entered an JsonFile.");
         }
         return true;
     }
@@ -49,7 +46,7 @@ public class SaveCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Сохраняет коллекцию в файл";
+        return "Saves the collection to a file";
     }
 
     @Override
