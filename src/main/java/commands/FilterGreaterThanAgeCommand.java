@@ -45,6 +45,6 @@ public class FilterGreaterThanAgeCommand implements Command {
 
     @Override
     public Class<?>[] getArgumentsClasses() {
-        return new Class[]{Integer.class};
+        return new Class[]{Long.class};
     }
 }

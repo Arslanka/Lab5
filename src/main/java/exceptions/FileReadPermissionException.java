@@ -1,6 +1,6 @@
 package exceptions;
 
-public class FileReadPermissionException extends IOException {
+public class FileReadPermissionException extends InputOutputException {
     public FileReadPermissionException(String message) {
         super(message);
     }

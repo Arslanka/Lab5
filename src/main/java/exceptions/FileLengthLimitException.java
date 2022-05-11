@@ -1,6 +1,6 @@
 package exceptions;
 
-public class FileLengthLimitException extends IOException {
+public class FileLengthLimitException extends InputOutputException {
     public FileLengthLimitException(String message) {
         super(message);
     }

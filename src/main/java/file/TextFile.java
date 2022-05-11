@@ -19,7 +19,7 @@ public class TextFile implements Readable, Writeable {
     }
 
     @Override
-    public String read() throws IOException {
+    public String read()  {
         try {
             final StringBuilder builder = new StringBuilder();
             final Reader in = new FileReader(file);
@@ -38,12 +38,12 @@ public class TextFile implements Readable, Writeable {
             }
             return builder.toString();
         } catch (IOException e) {
-            throw new FIleReadingException("File reading error\n" + e.getMessage());
+            throw new FIleReadingException("File reading error\n");
         }
     }
 
     @Override
-    public void write(String string) throws IOException {
+    public void write(String string)  {
         try {
             final OutputStreamWriter streamWriter
                     = new OutputStreamWriter(
@@ -51,7 +51,7 @@ public class TextFile implements Readable, Writeable {
             streamWriter.write(string);
             streamWriter.close();
         } catch (IOException e) {
-            throw new FIleWritingException("File writing error\n" + e.getMessage());
+            throw new FIleWritingException("File writing error\n");
         }
 
     }

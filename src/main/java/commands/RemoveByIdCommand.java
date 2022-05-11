@@ -23,7 +23,7 @@ public class RemoveByIdCommand implements Command {
     public boolean execute(Object... args) {
         try {
             collection.removeById((Integer) args[0]);
-            printer.println("An element whose id field value is equivalent to the specified " + args[0] + " one has been successfully removed from the collection", HELP);
+            printer.println("An element whose id field value is equivalent to the specified " + args[0] + " has been successfully removed from the collection", HELP);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ExecutionException("You have not entered an id to remove from the collection.");

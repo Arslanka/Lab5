@@ -115,7 +115,6 @@ public class Collection {
 
     public void filterGreaterThanAge(Long age) {
         printer.println("Collection items with an age field greater than the specified one: ", HELP);
-
         dragonHashSet
                 .stream()
                 .filter(d -> age.compareTo(d.getAge()) < 0)
@@ -134,6 +133,8 @@ public class Collection {
     public void addIfMax(Dragon dragon) {
         if (dragon.compareTo(Collections.max(dragonHashSet)) > 0) {
             dragonHashSet.add(dragon);
+        } else {
+            throw new ExecutionException("The entered element is less than the maximum from the collection");
         }
     }
 

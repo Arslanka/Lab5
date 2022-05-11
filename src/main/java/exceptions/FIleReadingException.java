@@ -1,6 +1,6 @@
 package exceptions;
 
-public class FIleReadingException extends IOException{
+public class FIleReadingException extends InputOutputException {
     public FIleReadingException(String message) {
         super(message);
     }

@@ -23,7 +23,7 @@ public class RemoveGreaterCommand implements Command {
     public boolean execute(Object... args) {
         try {
             collection.removeGreater((Dragon) args[0]);
-            printer.println("Items whose value is greater than the specified value have been successfully removed from the collection", HELP);
+            printer.println("Elements whose value is greater than the specified value have been successfully removed from the collection", HELP);
             printer.println(SEPARATOR, ERROR);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ExecutionException("You have not entered an element for comparison.");

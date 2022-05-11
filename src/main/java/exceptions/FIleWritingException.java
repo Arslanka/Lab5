@@ -1,6 +1,6 @@
 package exceptions;
 
-public class FIleWritingException extends IOException {
+public class FIleWritingException extends InputOutputException {
     public FIleWritingException(String message) {
         super(message);
     }

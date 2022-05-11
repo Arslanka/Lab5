@@ -1,12 +1,11 @@
 package file;
 
 import exceptions.FileReadPermissionException;
+import exceptions.InputOutputException;
 import io.Printer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import static io.ConsoleColor.ERROR;
 
 public class FileManager {
     private final String fileName;
@@ -21,20 +20,14 @@ public class FileManager {
         try {
             return new TextFile(new File(this.fileName));
         } catch (FileNotFoundException | FileReadPermissionException e) {
-            printer.println(e.getMessage(), ERROR);
+            throw new InputOutputException(e.getMessage());
         } catch (NullPointerException e) {
-            printer.println("You didn't enter the file name", ERROR);
+            throw new InputOutputException("You didn't enter the file name");
         }
-        return null;
     }
 
     public JsonFile getJsonFileByName() {
-        try {
-            return new JsonFile(this.getTextFileByName());
-        } catch (NullPointerException e) {
-            printer.println(e.getMessage(), ERROR);
-        }
-        return null;
+        return new JsonFile(this.getTextFileByName());
     }
 
 }

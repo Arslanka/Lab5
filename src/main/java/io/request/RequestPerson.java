@@ -26,7 +26,7 @@ public class RequestPerson {
         Person.Builder personBuilder = new Person.Builder();
         RequestLocation requestLocation = new RequestLocation(requestElement, sc, printer, inputData);
         printer.println("Enter the data to create the object " + "Person" + ":", OBJECT);
-        requestElement.get("   Enter a name: ",
+        requestElement.get("    Enter a name: ",
                 sc, printer,
                 inputData::getName,
                 personBuilder::withName, true);
@@ -34,7 +34,7 @@ public class RequestPerson {
                 sc, printer,
                 inputData::getDateTime,
                 personBuilder::withBirthday, true);
-        requestElement.get(HELP.wrapped("   Possible colors: " + Country.nameList()) + FIELD.wrapped("\n   Enter your nationality: "),
+        requestElement.get(HELP.wrapped("    Possible countries: " + Country.nameList()) + FIELD.wrapped("\n    Enter your nationality: "),
                 sc, printer,
                 inputData::getNationality,
                 personBuilder::withNationality, true);

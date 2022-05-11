@@ -38,6 +38,7 @@ exceptions/IncorrectIdException.class
 io/Printer.class
 commands/RemoveLowerCommand.class
 run/Main.class
+exceptions/InputOutputException.class
 data/Location.class
 commands/ShowCommand.class
 io/request/RequestDragon.class
@@ -48,7 +49,6 @@ commands/ExecuteScriptCommand.class
 commands/SaveCommand.class
 data/Coordinates$Builder.class
 exceptions/FileLengthLimitException.class
-exceptions/IOException.class
 io/request/RequestCoordinates.class
 file/FileManager.class
 io/Writeable.class

@@ -22,7 +22,7 @@ public class RemoveAllByWeight implements Command {
         try {
             Float weight = (Float) args[0];
             collection.removeByWeight(weight);
-            printer.println(String.format("%s %f %s", "Items whose weight field value is equivalent to", weight, "the specified one have been successfully removed from the collection"), HELP);
+            printer.println(String.format("%s %f %s", "Elements whose weight field value is equivalent to", weight, "the specified one have been successfully removed from the collection"), HELP);
             printer.println(SEPARATOR, ERROR);
 
         } catch (ArrayIndexOutOfBoundsException e) {

@@ -41,7 +41,7 @@ public class CommandInterpreter {
                 return command.execute(new CommandArguments(commandMap, supplierMap, command, requestMap).get(commandWithArgs));
             } else
                 return command.execute(scriptArgs);
-        } catch (IOException | IncorrectIdException | ObjectBuildException | ExecutionException e) {
+        } catch (ExistingIdException | InputOutputException | IncorrectIdException | ObjectBuildException | ExecutionException e) {
             printer.println(e.getMessage(), ERROR);
         }
         return true;

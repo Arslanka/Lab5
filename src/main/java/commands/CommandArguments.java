@@ -1,6 +1,7 @@
 package commands;
 
 
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import execute.AdvancedScript;
 import file.JsonFile;
@@ -74,7 +75,7 @@ public class CommandArguments {
                         commandArgs.add(obj);
                         ++start;
                         break;
-                    } catch (JsonParseException | IOException ignored) {
+                    } catch (Exception ignored) {
                     }
                     try {
                         Object obj = (requestMap.get(arg)).apply(new Scanner(argAsString.toString()), new Printer(true));
@@ -85,8 +86,9 @@ public class CommandArguments {
                 }
             }
         }
-        if (commandArgs.size() != commandArgsClasses.length && !data.toString().isEmpty())
-            throw new JsonParseException("You have entered incorrect arguments  in the command "  + command.getName());
+        if (commandArgs.size() != commandArgsClasses.length && !data.toString().isEmpty()) {
+            throw new JsonParseException("You have entered incorrect arguments in the command " + command.getName());
+        }
         return commandArgs.toArray();
     }
 

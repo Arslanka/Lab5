@@ -1,12 +1,10 @@
 package commands;
 
 import exceptions.ExecutionException;
-import exceptions.RecursiveCallException;
-import io.Printer;
+import exceptions.InputOutputException;
 import execute.AdvancedScript;
 
 import java.io.File;
-import java.io.IOException;
 
 public class ExecuteScriptCommand implements Command {
 
@@ -15,7 +13,7 @@ public class ExecuteScriptCommand implements Command {
         try {
             AdvancedScript script = (AdvancedScript) args[0];
             return script.execute();
-        } catch (ExecutionException e) {
+        } catch (InputOutputException | ExecutionException e) {
             throw new ExecutionException("Error executing the execute_script command\n" + e.getMessage());
         }
     }

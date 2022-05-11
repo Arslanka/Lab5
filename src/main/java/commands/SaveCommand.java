@@ -2,11 +2,11 @@ package commands;
 
 import collection.Collection;
 import exceptions.ExecutionException;
+import exceptions.InputOutputException;
 import file.JsonFile;
 import io.Printer;
 
 import java.io.File;
-import java.io.IOException;
 
 import static io.Application.SEPARATOR;
 import static io.ConsoleColor.HELP;
@@ -26,9 +26,9 @@ public class SaveCommand implements Command {
     public boolean execute(Object... args) {
         try {
             collection.save((JsonFile) args[0]);
-            printer.println("The collection is saved to a file " + args[0], HELP);
+            printer.println("The collection is saved to  " + args[0], HELP);
             printer.println(SEPARATOR, ERROR);
-        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+        } catch (InputOutputException | NullPointerException | ArrayIndexOutOfBoundsException e) {
             throw new ExecutionException("You have not entered an JsonFile.");
         }
         return true;
@@ -46,7 +46,7 @@ public class SaveCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Saves the collection to a file";
+        return "Saves the collection to  file";
     }
 
     @Override

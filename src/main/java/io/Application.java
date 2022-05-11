@@ -17,6 +17,7 @@ import file.TextFile;
 import io.request.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -108,7 +109,7 @@ public class Application {
         supplierMap.put("execute_script",
                 () -> new Object[]{new AdvancedScript(
                         new FileManager(requestElement
-                                .get("Enter the name of the script file:", sc, printer, inputData::getFileName, false), printer)
+                                .get("Enter the name of the script:", sc, printer, inputData::getFileName, false), printer)
                                 .getTextFileByName(), commandsByName, supplierMap, requestMap, printer)});
         commandsByName.put("add_if_max", new AddIfMaxCommand(collection, printer));
         supplierMap.put("add_if_max",

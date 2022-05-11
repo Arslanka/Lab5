@@ -39,10 +39,10 @@ public class RequestDragon {
         requestElement.get("    Enter the weight: ", sc, printer,
                 inputData::getWeight,
                 dragonBuilder::withWeight, true);
-        requestElement.get(HELP.wrapped("   Possible colors: " + Color.nameList()) + FIELD.wrapped("\n  Enter a color: "),
+        requestElement.get(HELP.wrapped("    Possible colors: " + Color.nameList()) + FIELD.wrapped("\n    Enter a color: "),
                 sc, printer, inputData::getColor,
                 dragonBuilder::withColor, true);
-        requestElement.get(HELP.wrapped("   Possible types: " + DragonType.nameList()) + FIELD.wrapped("\n  Enter a type: "),
+        requestElement.get(HELP.wrapped("    Possible types: " + DragonType.nameList()) + FIELD.wrapped("\n    Enter a type: "),
                 sc, printer, inputData::getType,
                 dragonBuilder::withType, true);
         dragonBuilder.withPerson(requestPerson.get().build());

@@ -1,7 +1,9 @@
 package execute;
 
+import com.google.gson.JsonParseException;
 import commands.*;
 import exceptions.ExecutionException;
+import exceptions.InputOutputException;
 import exceptions.RecursiveCallException;
 import file.TextFile;
 import io.Printer;
@@ -13,7 +15,7 @@ import java.util.function.Supplier;
 
 
 public class AdvancedScript {
-    protected static final Set<File> executableScripts = new HashSet<>();
+    public static final Set<File> executableScripts = new HashSet<>();
     private final TextFile textFile;
     private final Map<String, Command> commandMap;
     private final Map<String, Supplier<Object[]>> supplierMap;
@@ -33,55 +35,62 @@ public class AdvancedScript {
     }
 
     public boolean execute() {
-        if (!executableScripts.isEmpty() && executableScripts.contains(textFile.getFile())) {
-            String s = textFile.getFile().toString();
-            executableScripts.remove(textFile.getFile());
-            throw new RecursiveCallException(s);
-        }
-        executableScripts.add(textFile.getFile());
-        ArrayList<String> stringRep = new ArrayList<>();
         try {
-            Arrays.stream(textFile.read().split("\\s+")).filter(s -> !s.isEmpty()).forEach(stringRep::add);
-        } catch (IOException e) {
-            executableScripts.remove(textFile.getFile());
-            throw new ExecutionException(e.getMessage());
-        }
-        ArrayList<String> data = new ArrayList<>();
-        String lastCommand = "";
-        CommandInterpreter commandInterpreter = new CommandInterpreter(commandMap, supplierMap, printer, requestMap);
-        boolean isFirst = true;
-        for (String s : stringRep) {
+            if (executableScripts.contains(textFile.getFile())) {
+                executableScripts.clear();
+                throw new RecursiveCallException(textFile.getFile().toString());
+            }
+            executableScripts.add(textFile.getFile());
+            ArrayList<String> stringRep = new ArrayList<>();
+            try {
+                Arrays.stream(textFile.read().split("\\s+")).filter(s -> !s.isEmpty()).forEach(stringRep::add);
+            } catch (InputOutputException e) {
+                executableScripts.remove(textFile.getFile());
+                throw new ExecutionException(e.getMessage());
+            }
+            ArrayList<String> data = new ArrayList<>();
+            String lastCommand = "";
+            CommandInterpreter commandInterpreter = new CommandInterpreter(commandMap, supplierMap, printer, requestMap);
+            boolean isFirst = true;
+            for (String s : stringRep) {
+                if (!noExit) {
+                    executableScripts.remove(this.textFile.getFile());
+                    return false;
+                }
+                if (!commandMap.containsKey(s)) {
+                    data.add(s);
+                    continue;
+                }
+                if (isFirst) {
+                    if (!data.isEmpty()) {
+                        executableScripts.remove(this.textFile.getFile());
+                        throw new ExecutionException("You have entered incorrect data for the script");
+                    }
+                    lastCommand = s;
+                    isFirst = false;
+                    continue;
+                }
+                interpreter(data, lastCommand, commandInterpreter);
+                data.clear();
+                lastCommand = s;
+            }
             if (!noExit) {
                 executableScripts.remove(this.textFile.getFile());
                 return false;
-            }
-            if (!commandMap.containsKey(s)) {
-                data.add(s);
-                continue;
-            }
-            if (isFirst) {
-                if (!data.isEmpty()) {
-                    executableScripts.remove(this.textFile.getFile());
-                    throw new ExecutionException("You have entered incorrect data for the script");
-                }
-                lastCommand = s;
-                isFirst = false;
-                continue;
+            } else if (lastCommand.isEmpty()) {
+                executableScripts.remove(this.textFile.getFile());
+                throw new ExecutionException("The command name was entered incorrectly");
             }
             interpreter(data, lastCommand, commandInterpreter);
-            data.clear();
-            lastCommand = s;
-        }
-        if (!noExit) {
             executableScripts.remove(this.textFile.getFile());
-            return false;
-        } else if (lastCommand.isEmpty()) {
+            return true;
+        } catch (NullPointerException e) {
             executableScripts.remove(this.textFile.getFile());
-            throw new ExecutionException("The command name was entered incorrectly");
+            throw new ExecutionException("You have entered incorrect data for the script");
+        } catch (JsonParseException | InputOutputException e) {
+            executableScripts.remove(this.textFile.getFile());
+            throw new ExecutionException("You have entered incorrect data for the script\n" + e.getMessage());
         }
-        interpreter(data, lastCommand, commandInterpreter);
-        executableScripts.remove(this.textFile.getFile());
-        return false;
     }
 
     private void interpreter(ArrayList<String> data, String lastCommand, CommandInterpreter commandInterpreter) {
